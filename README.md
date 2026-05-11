@@ -5,9 +5,9 @@
 [![DOI — PAHA](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20112631-blue.png)](https://doi.org/10.5281/zenodo.20112631)
 [![DOI — Modus Primus](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20113785-blue.png)](https://doi.org/10.5281/zenodo.20113785)
 
-<p align="center">
-  <img src="docs/assets/figures/paha-fig-1-architectural-planes.png" alt="PAHA Figure 1 — The Three Architectural Planes (governance, cognitive, operational), separated by rate of change" width="900"/>
-</p>
+<div align="center">
+  <img src="docs/assets/figures/paha-fig-1-architectural-planes.png" alt="PAHA Figure 1 — The Three Architectural Planes (governance, cognitive, operational), separated by rate of change" width="900" style="max-width: 100%; height: auto;"/>
+</div>
 
 This repository is the public home of two complementary documents:
 
@@ -83,9 +83,9 @@ The proposed alternative is a **meta-harness as the durable architectural layer*
 
 The framework's value proposition rests on the **rate-of-change separation**: enterprise governance evolves on cycles measured in years; cognitive substrates evolve on cycles measured in months. Coupling them tightly imposes governance debt the enterprise cannot pay.
 
-<p align="center">
-  <img src="docs/assets/figures/paha-fig-2-meta-harness-with-consoles-agents.png" alt="PAHA Figure 2 — Meta-harness with fit-for-purpose consoles and composable agents" width="900"/>
-</p>
+<div align="center">
+  <img src="docs/assets/figures/paha-fig-2-meta-harness-with-consoles-agents.png" alt="PAHA Figure 2 — Meta-harness with fit-for-purpose consoles and composable agents" width="900" style="max-width: 100%; height: auto;"/>
+</div>
 
 The meta-harness spans all three planes and provides the durable substrate over which specialized consoles operate. Each console exposes a different operational surface optimized for its mission and user class while inheriting the same governance, audit, and execution-boundary infrastructure.
 
@@ -93,9 +93,9 @@ The meta-harness spans all three planes and provides the durable substrate over 
 
 The framework's foundational architectural principle is the distinction between *means* (purposive declarations of what the system uses toward its mission) and *mechanisms* (operationally agnostic capacity). The relationship between them is **selection**, not abstraction: purposive layers elect from mechanism layers, and unelected mechanisms are not part of the system's disposition even when operationally available.
 
-<p align="center">
-  <img src="docs/assets/figures/modus-primus-fig-1-means-mechanisms-selection.png" alt="Modus Primus Figure 1 — The Means and Mechanisms Selection Relation" width="900"/>
-</p>
+<div align="center">
+  <img src="docs/assets/figures/modus-primus-fig-1-means-mechanisms-selection.png" alt="Modus Primus Figure 1 — The Means and Mechanisms Selection Relation" width="900" style="max-width: 100%; height: auto;"/>
+</div>
 
 This keystone propagates through the Work Breakdown Structure, the federation pattern, the V&V approach, and the engineering specializations. Mechanisms not elected by any purposive layer are inventory, not disposition; this discipline is what prevents silent capability creep.
 
@@ -118,9 +118,9 @@ The Modus Primus ecosystem is structured for **public-private separation**. Diff
 
 **Federation tier model anchoring the ecosystem split.** The public-private separation maps onto the Modus federation tier hierarchy: Modus Primus (root governance, public spec authority) operates at the slowest cadence and lives in the public repo; downstream tiers operate at faster cadences and live where their operational scope dictates.
 
-<p align="center">
-  <img src="docs/assets/figures/modus-primus-fig-4-federation-tier-model.png" alt="Modus Primus Figure 4 — The Modus Federation Tier Model" width="900"/>
-</p>
+<div align="center">
+  <img src="docs/assets/figures/modus-primus-fig-4-federation-tier-model.png" alt="Modus Primus Figure 4 — The Modus Federation Tier Model" width="900" style="max-width: 100%; height: auto;"/>
+</div>
 
 **Source-of-truth flow.** Drafts originate in `modus-primus-staging` (or in contributor work surfaces). Once genericized and reviewed via cross-AI coordination on `cross-ai`, they land here as public PRs. Live operational evidence flows from `modus-primus-sandbox` back through `modus-primus-staging` for genericization before public release.
 
