@@ -141,12 +141,12 @@ Substrate substitution is governed by Modus Primus §7.5 (substrate substitution
 
 ## Concrete reference artifacts
 
-The baseline ships two concrete operational consoles as sibling reference kits under [`consoles/`](../consoles/). Adopters fork these as starting points; each kit is fully `[ENTERPRISE:]`-marker-driven and runs once markers are resolved.
+Two concrete operational console reference kits live at the repository root under [`/consoles/`](../../../consoles/) (deliberately tech-baseline-agnostic so multiple tech-baselines can reference the same kits). This baseline elects both as means; adopters fork the kits as starting points and each kit is fully `[ENTERPRISE:]`-marker-driven once markers are resolved.
 
 | Artifact | Path | Realizes |
 |---|---|---|
-| **Chat console reference kit** | [`consoles/chat-console-reference/`](../consoles/chat-console-reference/) | Human-interaction surface for the enclave. aiohttp + JS frontend, ~9K LOC. Replaces the abstract "operational interaction console" mechanism with a concrete starting point. |
-| **Agents console reference kit** | [`consoles/agents-console-reference/`](../consoles/agents-console-reference/) | Agent operations surface for the Tertius layer. aiohttp + aiosqlite + substrate-adapter runtime, ~10K LOC. Includes four substrate adapter classes (self-hosted inference, cognitive-engine-CLI, two vendor APIs) so adopters can run Scenario 1 / 2 / hybrid out of the box. Curated spec catalog demonstrates research / services / workflows / triggers / ops patterns. |
+| **Chat console reference kit** | [`/consoles/chat-console-reference/`](../../../consoles/chat-console-reference/) | Human-interaction surface for the enclave. aiohttp + JS frontend, ~9K LOC. Replaces the abstract "operational interaction console" mechanism with a concrete starting point. |
+| **Agents console reference kit** | [`/consoles/agents-console-reference/`](../../../consoles/agents-console-reference/) | Agent operations surface for the Tertius layer. aiohttp + aiosqlite + substrate-adapter runtime, ~10K LOC. Includes four substrate adapter classes (self-hosted inference, cognitive-engine-CLI, two vendor APIs) so adopters can run Scenario 1 / 2 / hybrid out of the box. Curated spec catalog demonstrates research / services / workflows / triggers / ops patterns. |
 
 Each kit is structured in three layers:
 

@@ -29,16 +29,16 @@ This repository is the public home of two complementary documents:
 │   ├── executive/                  executive summary + slide deck
 │   ├── reviews/                    peer reviews of published artifacts
 │   └── v1.2-candidates/            v1.2 spec revision candidate proposals (see #2 umbrella)
-└── tech-baselines/                 published reference instances
-    └── 01-large-enterprise-mvp/    Scenario 2 (self-hosted open-weights), DevOps + ITIO + CyberOps
-        ├── meta-harness/           five-M + boot manifest (mode.md)
-        ├── execution-governance/   policy + runtime
-        ├── orchestration/          Secundus orchestrator reference
-        ├── agents/                 10 agent contracts spanning the three domains
-        ├── mechanisms/             B.7 mechanism layer inventory
-        └── consoles/               concrete operational console reference kits
-            ├── chat-console-reference/   ~9K LOC aiohttp + JS frontend kit
-            └── agents-console-reference/ ~10K LOC agents service + four substrate adapters
+├── consoles/                       reference operational console kits (tech-baseline-agnostic)
+│   ├── chat-console-reference/      ~9K LOC aiohttp + JS frontend kit
+│   └── agents-console-reference/    ~10K LOC agents service + four substrate adapters
+└── tech-baselines/                  published reference instances
+    └── 01-large-enterprise-mvp/     Scenario 2 (self-hosted open-weights), DevOps + ITIO + CyberOps
+        ├── meta-harness/            five-M + boot manifest (mode.md)
+        ├── execution-governance/    policy + runtime
+        ├── orchestration/           Secundus orchestrator reference
+        ├── agents/                  10 agent contracts spanning the three domains
+        └── mechanisms/              B.7 mechanism layer inventory (elects /consoles/* as means)
 ```
 
 The `docs/specs/` directory is canonical for the published specs. The `tech-baselines/` directory holds concrete reference instances that realize the spec; additional instances may land here as new persona / scenario configurations are published.

@@ -1,9 +1,9 @@
 # Chat Console Reference Kit
 
-Sanitized reference implementation of the operational interaction console layer of a Modus Primus instance. Lives under [`tech-baselines/01-large-enterprise-mvp/consoles/chat-console-reference/`](.) and is referenced from the parent baseline's `mechanisms/tools.md` as the concrete artifact for the chat-console operational mechanism.
+Sanitized reference implementation of the operational interaction console layer of a Modus Primus instance. Lives under [`consoles/chat-console-reference/`](.) and is referenced from any tech-baseline that elects the chat console mechanism (see `tech-baselines/01-large-enterprise-mvp/mechanisms/tools.md` for an example) as the concrete artifact for the chat-console operational mechanism.
 
 <div align="center">
-  <img src="../../../../docs/assets/figures/paha-fig-2-meta-harness-with-consoles-agents.png" alt="PAHA Figure 2 — Meta-harness with fit-for-purpose consoles and composable agents" width="900" style="max-width: 100%; height: auto;"/>
+  <img src="../../docs/assets/figures/paha-fig-2-meta-harness-with-consoles-agents.png" alt="PAHA Figure 2 — Meta-harness with fit-for-purpose consoles and composable agents" width="900" style="max-width: 100%; height: auto;"/>
 </div>
 
 This kit is one concrete realization of the **Console** surface in the PAHA diagram above — the human-facing interaction layer between operators and the agents catalog, inheriting governance from the meta-harness while exposing a domain-specialized operational surface. Sibling [`agents-console-reference/`](../agents-console-reference/) realizes the agent-operations surface.
@@ -61,9 +61,9 @@ chat-console-reference/
 6. **`src/providers/base.py`** — adapter interface adopters implement against
 7. **`src/turns.py`** — server-authoritative turn buffer; the operational substrate underneath the chat surface
 
-## Integration with the parent tech baseline
+## Integration with tech-baselines
 
-This kit realizes specific entries in the parent `tech-baselines/01-large-enterprise-mvp/`:
+This kit is referenced from tech-baselines that elect the chat console mechanism. Specific WBS-entry coverage as realized in `tech-baselines/01-large-enterprise-mvp/`:
 
 | WBS reference | Realized by this kit |
 |---|---|
@@ -77,10 +77,10 @@ The kit is one operational realization. Adopters operating different chat-surfac
 
 ## License
 
-Inherited from the parent baseline. Per the parent baseline's README: CC BY 4.0.
+[CC BY 4.0](../../LICENSE) — share and adapt with attribution.
 
 ## Provenance
 
 Sanitized from a production reference deployment. All source-project identifiers, host addresses, identity references, and substrate-vendor specifics have been replaced with `[ENTERPRISE:]` markers per the genericization criteria documented in the parent baseline tracking issue.
 
-Adopters reporting marker gaps (spots where a `[ENTERPRISE:]` placeholder is needed but missing, or where an identifier slipped through scrubbing) should file against the parent baseline.
+Adopters reporting marker gaps (spots where a `[ENTERPRISE:]` placeholder is needed but missing, or where an identifier slipped through scrubbing) should file an issue against this repository.

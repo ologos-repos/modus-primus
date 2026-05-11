@@ -1,9 +1,9 @@
 # Agents Console Reference Kit
 
-Sanitized reference implementation of the agent operations console layer of a Modus Primus instance. Lives under [`tech-baselines/01-large-enterprise-mvp/consoles/agents-console-reference/`](.) and is the operational counterpart to the chat console reference at [`../chat-console-reference/`](../chat-console-reference/).
+Sanitized reference implementation of the agent operations console layer of a Modus Primus instance. Lives under [`consoles/agents-console-reference/`](.) and is the operational counterpart to the chat console reference at [`../chat-console-reference/`](../chat-console-reference/).
 
 <div align="center">
-  <img src="../../../../docs/assets/figures/modus-primus-fig-4-federation-tier-model.png" alt="Modus Primus Figure 4 — The Modus Federation Tier Model" width="900" style="max-width: 100%; height: auto;"/>
+  <img src="../../docs/assets/figures/modus-primus-fig-4-federation-tier-model.png" alt="Modus Primus Figure 4 — The Modus Federation Tier Model" width="900" style="max-width: 100%; height: auto;"/>
 </div>
 
 This kit is the operational surface for **Modus Tertius** in the federation tier model above — the persistent specialist agents tier with stable role bindings and audit trails. The console manages spec catalog (agent contracts), run history (Tertius invocations including Quartus tool-bound execution and Quintus ephemeral parallel coordination), and the substrate-adapter layer that binds agents to their elected cognitive engines.
@@ -74,9 +74,9 @@ agents-console-reference/
 9. **`src/runtime/backend.py`** — adapter interface; what adopters implement against
 10. **`src/runtime/audit.py`** — audit-record emission; federation-bus integration point
 
-## Integration with the parent tech baseline
+## Integration with tech-baselines
 
-This kit realizes specific entries in the parent `tech-baselines/01-large-enterprise-mvp/`:
+This kit is referenced from tech-baselines that elect the agents console mechanism. Specific WBS-entry coverage as realized in `tech-baselines/01-large-enterprise-mvp/`:
 
 | WBS reference | Realized by this kit |
 |---|---|
@@ -107,10 +107,10 @@ The shipped specs are a curated subset demonstrating the spec patterns rather th
 
 ## License
 
-Inherited from the parent baseline: CC BY 4.0.
+[CC BY 4.0](../../LICENSE) — share and adapt with attribution.
 
 ## Provenance
 
 Sanitized from a production reference deployment. All source-project identifiers, host addresses, identity references, and substrate-vendor specifics have been replaced with `[ENTERPRISE:]` markers per the genericization criteria in the parent baseline tracking issue. The spec catalog was curated to drop project-specific operational specs (Telegram bridges, email bots, project-internal reminders) in favor of pattern-demonstrating representative specs.
 
-Adopters reporting marker gaps or content that should be further generalized should file against the parent baseline.
+Adopters reporting marker gaps or content that should be further generalized should file an issue against this repository.
