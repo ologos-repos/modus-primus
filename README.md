@@ -9,10 +9,35 @@ This repository is the public home of two complementary documents:
 
 | Document | Role | File | DOI |
 |---|---|---|---|
-| **Portable Agent Harness Architecture (PAHA)** | The architectural framework. Defines a meta-harness pattern providing centralized governance, bounded execution, and substrate arbitration over which fit-for-purpose operational consoles and composable agents are instantiated. Three architectural planes (governance, cognitive, operational); seven minimum-viable services; five primitives. Rev 2.2, February 2026. | [`PAHA-v2.2.pdf`](PAHA-v2.2.pdf) · [`.docx`](PAHA-v2.2.docx) | [10.5281/zenodo.20112631](https://doi.org/10.5281/zenodo.20112631) |
-| **Modus Primus Engineering Specification** | The engineering companion subordinate to PAHA. Specifies the concrete services, contracts, and interaction shapes implementing the PAHA pattern as a minimum viable harness. v1.1. | [`modus-primus-spec-v1.1.pdf`](modus-primus-spec-v1.1.pdf) · [`.docx`](modus-primus-spec-v1.1.docx) | [10.5281/zenodo.20113785](https://doi.org/10.5281/zenodo.20113785) |
-| Executive summary | Condensed written summary of PAHA + Modus Primus for executive audiences. | [`paha-modus-executive-summary-v1.docx`](paha-modus-executive-summary-v1.docx) | — |
-| Executive overview deck | Slide-form companion to the executive summary. | [`modus-primus-executive-v1.pptx`](modus-primus-executive-v1.pptx) | — |
+| **Portable Agent Harness Architecture (PAHA)** | The architectural framework. Defines a meta-harness pattern providing centralized governance, bounded execution, and substrate arbitration over which fit-for-purpose operational consoles and composable agents are instantiated. Three architectural planes (governance, cognitive, operational); seven minimum-viable services; five primitives. Rev 2.2, February 2026. | [`docs/specs/PAHA-v2.2.pdf`](docs/specs/PAHA-v2.2.pdf) · [`.docx`](docs/specs/PAHA-v2.2.docx) | [10.5281/zenodo.20112631](https://doi.org/10.5281/zenodo.20112631) |
+| **Modus Primus Engineering Specification** | The engineering companion subordinate to PAHA. Specifies the concrete services, contracts, and interaction shapes implementing the PAHA pattern as a minimum viable harness. v1.1. | [`docs/specs/modus-primus-spec-v1.1.pdf`](docs/specs/modus-primus-spec-v1.1.pdf) · [`.docx`](docs/specs/modus-primus-spec-v1.1.docx) | [10.5281/zenodo.20113785](https://doi.org/10.5281/zenodo.20113785) |
+| Executive summary | Condensed written summary of PAHA + Modus Primus for executive audiences. | [`docs/executive/paha-modus-executive-summary-v1.docx`](docs/executive/paha-modus-executive-summary-v1.docx) | — |
+| Executive overview deck | Slide-form companion to the executive summary. | [`docs/executive/modus-primus-executive-v1.pptx`](docs/executive/modus-primus-executive-v1.pptx) | — |
+
+## Repository layout
+
+```
+.
+├── README.md                       this file
+├── LICENSE                         CC BY 4.0
+├── docs/
+│   ├── specs/                      canonical PAHA + Modus Primus PDFs + DOCX sources
+│   ├── executive/                  executive summary + slide deck
+│   ├── reviews/                    peer reviews of published artifacts
+│   └── v1.2-candidates/            v1.2 spec revision candidate proposals (see #2 umbrella)
+└── tech-baselines/                 published reference instances
+    └── 01-large-enterprise-mvp/    Scenario 2 (self-hosted open-weights), DevOps + ITIO + CyberOps
+        ├── meta-harness/           five-M + boot manifest (mode.md)
+        ├── execution-governance/   policy + runtime
+        ├── orchestration/          Secundus orchestrator reference
+        ├── agents/                 10 agent contracts spanning the three domains
+        ├── mechanisms/             B.7 mechanism layer inventory
+        └── consoles/               concrete operational console reference kits
+            ├── chat-console-reference/   ~9K LOC aiohttp + JS frontend kit
+            └── agents-console-reference/ ~10K LOC agents service + four substrate adapters
+```
+
+The `docs/specs/` directory is canonical for the published specs. The `tech-baselines/` directory holds concrete reference instances that realize the spec; additional instances may land here as new persona / scenario configurations are published.
 
 ## How to cite
 
