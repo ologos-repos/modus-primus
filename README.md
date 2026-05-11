@@ -9,10 +9,35 @@ This repository is the public home of two complementary documents:
 
 | Document | Role | File | DOI |
 |---|---|---|---|
-| **Portable Agent Harness Architecture (PAHA)** | The architectural framework. Defines a meta-harness pattern providing centralized governance, bounded execution, and substrate arbitration over which fit-for-purpose operational consoles and composable agents are instantiated. Three architectural planes (governance, cognitive, operational); seven minimum-viable services; five primitives. Rev 2.2, February 2026. | [`PAHA-v2.2.pdf`](PAHA-v2.2.pdf) · [`.docx`](PAHA-v2.2.docx) | [10.5281/zenodo.20112631](https://doi.org/10.5281/zenodo.20112631) |
-| **Modus Primus Engineering Specification** | The engineering companion subordinate to PAHA. Specifies the concrete services, contracts, and interaction shapes implementing the PAHA pattern as a minimum viable harness. v1.1. | [`modus-primus-spec-v1.1.pdf`](modus-primus-spec-v1.1.pdf) · [`.docx`](modus-primus-spec-v1.1.docx) | [10.5281/zenodo.20113785](https://doi.org/10.5281/zenodo.20113785) |
-| Executive summary | Condensed written summary of PAHA + Modus Primus for executive audiences. | [`paha-modus-executive-summary-v1.docx`](paha-modus-executive-summary-v1.docx) | — |
-| Executive overview deck | Slide-form companion to the executive summary. | [`modus-primus-executive-v1.pptx`](modus-primus-executive-v1.pptx) | — |
+| **Portable Agent Harness Architecture (PAHA)** | The architectural framework. Defines a meta-harness pattern providing centralized governance, bounded execution, and substrate arbitration over which fit-for-purpose operational consoles and composable agents are instantiated. Three architectural planes (governance, cognitive, operational); seven minimum-viable services; five primitives. Rev 2.2, February 2026. | [`docs/specs/PAHA-v2.2.pdf`](docs/specs/PAHA-v2.2.pdf) · [`.docx`](docs/specs/PAHA-v2.2.docx) | [10.5281/zenodo.20112631](https://doi.org/10.5281/zenodo.20112631) |
+| **Modus Primus Engineering Specification** | The engineering companion subordinate to PAHA. Specifies the concrete services, contracts, and interaction shapes implementing the PAHA pattern as a minimum viable harness. v1.1. | [`docs/specs/modus-primus-spec-v1.1.pdf`](docs/specs/modus-primus-spec-v1.1.pdf) · [`.docx`](docs/specs/modus-primus-spec-v1.1.docx) | [10.5281/zenodo.20113785](https://doi.org/10.5281/zenodo.20113785) |
+| Executive summary | Condensed written summary of PAHA + Modus Primus for executive audiences. | [`docs/executive/paha-modus-executive-summary-v1.docx`](docs/executive/paha-modus-executive-summary-v1.docx) | — |
+| Executive overview deck | Slide-form companion to the executive summary. | [`docs/executive/modus-primus-executive-v1.pptx`](docs/executive/modus-primus-executive-v1.pptx) | — |
+
+## Repository layout
+
+```
+.
+├── README.md                       this file
+├── LICENSE                         CC BY 4.0
+├── docs/
+│   ├── specs/                      canonical PAHA + Modus Primus PDFs + DOCX sources
+│   ├── executive/                  executive summary + slide deck
+│   ├── reviews/                    peer reviews of published artifacts
+│   └── v1.2-candidates/            v1.2 spec revision candidate proposals (see #2 umbrella)
+└── tech-baselines/                 published reference instances
+    └── 01-large-enterprise-mvp/    Scenario 2 (self-hosted open-weights), DevOps + ITIO + CyberOps
+        ├── meta-harness/           five-M + boot manifest (mode.md)
+        ├── execution-governance/   policy + runtime
+        ├── orchestration/          Secundus orchestrator reference
+        ├── agents/                 10 agent contracts spanning the three domains
+        ├── mechanisms/             B.7 mechanism layer inventory
+        └── consoles/               concrete operational console reference kits
+            ├── chat-console-reference/   ~9K LOC aiohttp + JS frontend kit
+            └── agents-console-reference/ ~10K LOC agents service + four substrate adapters
+```
+
+The `docs/specs/` directory is canonical for the published specs. The `tech-baselines/` directory holds concrete reference instances that realize the spec; additional instances may land here as new persona / scenario configurations are published.
 
 ## How to cite
 
@@ -57,6 +82,23 @@ The framework's value proposition rests on the **rate-of-change separation**: en
 ## Scope qualifier
 
 The pattern is grounded in defense IT realities (classified network segmentation, ITAR/EAR, FedRAMP, CMMC, ATO cycles, air-gapped deployment) because those constraints make the value visible. The architectural pattern generalizes beyond defense; the qualified market thesis is that *orchestration supremacy* applies most strongly to organizations whose security posture or regulatory regime prevents acceptance of vendor-integrated orchestration. For organizations with single-vendor consolidation strategies in commercial environments, vendor-integrated orchestration may be the more economically rational choice — and the pattern proposed here represents unnecessary overhead.
+
+## Ecosystem
+
+The Modus Primus ecosystem is structured for **public-private separation**. Different repos serve different audiences and visibility levels; each carries its own access posture.
+
+| Repo | Visibility | Purpose | Audience |
+|---|---|---|---|
+| **`ologos-repos/modus-primus`** (this repo) | **Public** | Canonical home of the published PAHA + Modus Primus specifications, reference instances (`tech-baselines/`), v1.2+ candidate proposals (`docs/v1.2-candidates/`), reviews (`docs/reviews/`). All artifacts here are fully genericized — adopters fork or cite without exposure to source-project specifics. | Anyone — adopters, researchers, AI peers, the public |
+| **`ologos-repos/modus-primus-staging`** | Private | Pre-scrub staging for artifacts destined for this public repo. Work-in-progress lessons-learned, RFC drafts, candidate proposals before `[ENTERPRISE:]` genericization. Squash-PR to public on release. | Authorized contributors (humans + AI peers with org-side access) |
+| **`ologos-repos/modus-primus-sandbox`** | Private | Live Modus Primus sandbox deployment at `primus.telogos.ai`. Harness sources, operational agent contracts, service deployment configs, OAuth wiring. Permanently private (founder-only at v0.1). | Founder + cleared operators |
+| [`ologos-corp/cross-ai`](https://github.com/ologos-corp/cross-ai) | Private | Cross-instance AI coordination substrate. Issues are the wire; RFCs / schemas live in-tree. Peer-Primus coordination per [`rfcs/peer-primus-coordination-v0.1.md`](https://github.com/ologos-corp/cross-ai/blob/main/rfcs/peer-primus-coordination-v0.1.md) happens here. | AI peers + their designated humans |
+
+**Why the separation matters.** Adopters reading the public spec need a stable, citable, fully-genericized artifact. Contributors and live operators need a working surface that retains source-project details, operational identifiers, and credentials. Conflating them either burdens public readers with internal noise or forces operational surfaces into premature genericization. The four-repo pattern preserves both audiences cleanly.
+
+**Source-of-truth flow.** Drafts originate in `modus-primus-staging` (or in contributor work surfaces). Once genericized and reviewed via cross-AI coordination on `cross-ai`, they land here as public PRs. Live operational evidence flows from `modus-primus-sandbox` back through `modus-primus-staging` for genericization before public release.
+
+**For AI peers operating in this ecosystem.** Address messages and review against the repo that matches the artifact's visibility class. Cross-AI coordination dialogue → `cross-ai`. Public-release PRs → this repo. Pre-release work → `modus-primus-staging`. Live deployment work → `modus-primus-sandbox`. The peer-Primus coordination RFC (v0.1) documents the production-observed pattern; v0.2+ will absorb operational evidence as it accumulates.
 
 ## Author
 
