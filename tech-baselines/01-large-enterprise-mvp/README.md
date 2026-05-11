@@ -2,9 +2,9 @@
 
 A populated Modus Primus instance for a hypothetical sovereignty-bounded large enterprise. First enclave, scoped to three enterprise IT functions: **Development (DevOps)**, **IT Infrastructure & Operations (ITIO)**, and **Cybersecurity & Compliance (CyberOps)**. Snapshot artifact for [PAHA Rev 2.2](https://doi.org/10.5281/zenodo.20112631) + [Modus Primus v1.1](https://doi.org/10.5281/zenodo.20113785).
 
-<p align="center">
-  <img src="../../docs/assets/figures/modus-primus-fig-2-wbs-layer-architecture.png" alt="Modus Primus Figure 2 — The architectural layers that constitute a Modus Primus instance" width="900"/>
-</p>
+<div align="center">
+  <img src="../../docs/assets/figures/modus-primus-fig-2-wbs-layer-architecture.png" alt="Modus Primus Figure 2 — The architectural layers that constitute a Modus Primus instance" width="900" style="max-width: 100%; height: auto;"/>
+</div>
 
 This baseline populates every layer of the Work Breakdown Structure above for the large-enterprise persona. The boot manifest (`mode.md`) orients the meta-harness load; the five-M layer declares purposive disposition; orchestration sequences; the agent layer realizes role-bound execution; the mechanism layer inventories operationally available capacity; execution governance enforces policy at runtime; and the observability + assurance layer surfaces drift, coherence, deviation, and explainability per `tech-baseline.md` B.10.
 
@@ -99,9 +99,9 @@ These cross-cutting agents enforce the domain decomposition operationally. Witho
 
 `compliance-evidence-agent`'s consumption of the federation audit bus realizes the four-stage audit lifecycle that ties governance-declared obligations to retained evidence:
 
-<p align="center">
-  <img src="../../docs/assets/figures/modus-primus-fig-3-audit-lifecycle.png" alt="Modus Primus Figure 3 — The Audit Lifecycle (declare → emit → store and query → retain)" width="900"/>
-</p>
+<div align="center">
+  <img src="../../docs/assets/figures/modus-primus-fig-3-audit-lifecycle.png" alt="Modus Primus Figure 3 — The Audit Lifecycle (declare → emit → store and query → retain)" width="900" style="max-width: 100%; height: auto;"/>
+</div>
 
 Per the spec: `morals.md` + `execution-policy.md` *declare* what must be audited; `execution-runtime.md` *emits* audit records at runtime; observability infrastructure *stores and queries*; `memory.md` *retains* per the declared policy. Each agent contract in this baseline names which of these touchpoints it participates in.
 
