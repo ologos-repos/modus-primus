@@ -1,0 +1,149 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Draw.io shape to SysML/UML stereotype mappings for Cameo import",
+    "cameo_profile": "SysML",
+    "xmi_version": "2.5.1"
+  },
+  "shape_mappings": {
+    "swimlane": {
+      "sysml_type": "Block",
+      "uml_type": "Class",
+      "stereotype": "block",
+      "description": "Maps to SysML Block (containment structure)"
+    },
+    "rounded": {
+      "sysml_type": "Block",
+      "uml_type": "Class",
+      "stereotype": "block",
+      "description": "Generic rounded rectangle maps to Block"
+    },
+    "ellipse": {
+      "sysml_type": "Activity",
+      "uml_type": "Activity",
+      "stereotype": null,
+      "description": "Ellipse shapes map to Activity nodes"
+    },
+    "rhombus": {
+      "sysml_type": "DecisionNode",
+      "uml_type": "DecisionNode",
+      "stereotype": null,
+      "description": "Diamond shapes map to Decision nodes"
+    },
+    "process": {
+      "sysml_type": "Action",
+      "uml_type": "Action",
+      "stereotype": null,
+      "description": "Process shapes map to Actions"
+    },
+    "cylinder": {
+      "sysml_type": "Block",
+      "uml_type": "Class",
+      "stereotype": "dataStore",
+      "description": "Cylinder (database) maps to Block with dataStore stereotype"
+    },
+    "document": {
+      "sysml_type": "Block",
+      "uml_type": "Class",
+      "stereotype": "document",
+      "description": "Document shapes map to Block with document stereotype"
+    },
+    "actor": {
+      "sysml_type": "Actor",
+      "uml_type": "Actor",
+      "stereotype": null,
+      "description": "Actor stickman maps to UML Actor"
+    },
+    "text": {
+      "sysml_type": "Comment",
+      "uml_type": "Comment",
+      "stereotype": null,
+      "description": "Standalone text becomes Comment"
+    },
+    "cloud": {
+      "sysml_type": "Block",
+      "uml_type": "Class",
+      "stereotype": "external",
+      "description": "Cloud shapes map to external system Block"
+    },
+    "mxgraph.aws4": {
+      "sysml_type": "Block",
+      "uml_type": "Class",
+      "stereotype": "aws_resource",
+      "description": "AWS shapes map to Block with aws_resource stereotype"
+    }
+  },
+  "edge_mappings": {
+    "orthogonalEdgeStyle": {
+      "sysml_type": "Connector",
+      "uml_type": "Association",
+      "description": "Standard orthogonal edges become Associations"
+    },
+    "edgeStyle=none": {
+      "sysml_type": "Connector",
+      "uml_type": "Dependency",
+      "description": "Simple edges become Dependencies"
+    },
+    "dashed=1": {
+      "sysml_type": "Connector",
+      "uml_type": "Dependency",
+      "description": "Dashed edges become Dependencies"
+    }
+  },
+  "container_mappings": {
+    "swimlane_horizontal": {
+      "sysml_type": "Package",
+      "description": "Horizontal swimlane becomes Package"
+    },
+    "swimlane_vertical": {
+      "sysml_type": "Package",
+      "description": "Vertical swimlane becomes Package"
+    },
+    "group": {
+      "sysml_type": "Package",
+      "description": "Grouped elements become Package"
+    }
+  },
+  "aws_shape_mappings": {
+    "mxgraph.aws4.ec2": {
+      "name_suffix": "EC2 Instance",
+      "stereotype": "computeResource"
+    },
+    "mxgraph.aws4.rds": {
+      "name_suffix": "RDS Database",
+      "stereotype": "dataStore"
+    },
+    "mxgraph.aws4.s3": {
+      "name_suffix": "S3 Bucket",
+      "stereotype": "storageResource"
+    },
+    "mxgraph.aws4.cloudfront": {
+      "name_suffix": "CloudFront CDN",
+      "stereotype": "networkResource"
+    },
+    "mxgraph.aws4.application_load_balancer": {
+      "name_suffix": "ALB",
+      "stereotype": "networkResource"
+    },
+    "mxgraph.aws4.nat_gateway": {
+      "name_suffix": "NAT Gateway",
+      "stereotype": "networkResource"
+    },
+    "mxgraph.aws4.internet_gateway": {
+      "name_suffix": "Internet Gateway",
+      "stereotype": "networkResource"
+    },
+    "mxgraph.aws4.users": {
+      "name_suffix": "Users",
+      "stereotype": "actor"
+    }
+  },
+  "style_keywords": {
+    "fillColor": "Maps to element visual properties (preserved in notes)",
+    "strokeColor": "Maps to element visual properties (preserved in notes)",
+    "strokeWidth": "Maps to element emphasis",
+    "fontStyle=1": "Bold - indicates primary element",
+    "fontStyle=2": "Italic - indicates derived/abstract element",
+    "dashed=1": "Indicates optional or future state"
+  }
+}

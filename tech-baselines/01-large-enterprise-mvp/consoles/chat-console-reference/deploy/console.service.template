@@ -1,0 +1,17 @@
+[Unit]
+Description=chat console (web control surface)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=[ENTERPRISE: deployment root]/console
+EnvironmentFile=[ENTERPRISE: deployment root]/console/.env
+Environment=PYTHONUNBUFFERED=1
+Environment=PATH=[ENTERPRISE: additional PATH entries if needed for tooling]:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/python3 app.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,23 @@
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = ["error"]
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "tests/*",
+    "web/*",
+    "profiles/*",
+    "tools/*",
+    "history/*",
+    "downloads/*",
+    "turns/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]

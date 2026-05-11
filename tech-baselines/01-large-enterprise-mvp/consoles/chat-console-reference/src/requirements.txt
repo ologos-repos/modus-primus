@@ -1,0 +1,5 @@
+aiohttp>=3.9
+aiohttp-session>=2.12
+cryptography>=42
+python-dotenv>=1.0
+PyYAML>=6

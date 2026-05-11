@@ -1,0 +1,21 @@
+[Unit]
+Description=agents-console agents fleet (web control surface)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=[ENTERPRISE: deployment root]
+EnvironmentFile=[ENTERPRISE: deployment root]/means/agents/.env
+# Optional: Gemini/OpenAI keys (matches console.service pattern; the
+# leading `-` keeps the unit healthy on a fresh checkout where the file
+# isn't present yet).
+EnvironmentFile=-[ENTERPRISE: user home]/.[ENTERPRISE: org identifier]-credentials
+Environment=PYTHONUNBUFFERED=1
+Environment=PATH=[ENTERPRISE: user home]/.nvm/versions/node/v24.13.0/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/python3 -m means.agents.app
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
