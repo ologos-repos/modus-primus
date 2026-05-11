@@ -2,6 +2,12 @@
 
 Sanitized reference implementation of the agent operations console layer of a Modus Primus instance. Lives under [`tech-baselines/01-large-enterprise-mvp/consoles/agents-console-reference/`](.) and is the operational counterpart to the chat console reference at [`../chat-console-reference/`](../chat-console-reference/).
 
+<p align="center">
+  <img src="../../../../docs/assets/figures/modus-primus-fig-4-federation-tier-model.png" alt="Modus Primus Figure 4 — The Modus Federation Tier Model" width="900"/>
+</p>
+
+This kit is the operational surface for **Modus Tertius** in the federation tier model above — the persistent specialist agents tier with stable role bindings and audit trails. The console manages spec catalog (agent contracts), run history (Tertius invocations including Quartus tool-bound execution and Quintus ephemeral parallel coordination), and the substrate-adapter layer that binds agents to their elected cognitive engines.
+
 ## What this is
 
 A working agent-operations console that serves as the operational surface for the Modus Tertius layer: spec catalog, run history, audit traces, agent invocation dispatch, suspension/clearance workflows, and substrate-adapter management. Engineers and agent owners engage through this surface to author, invoke, monitor, and revise agent runs.
