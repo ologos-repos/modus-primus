@@ -58,6 +58,23 @@ The framework's value proposition rests on the **rate-of-change separation**: en
 
 The pattern is grounded in defense IT realities (classified network segmentation, ITAR/EAR, FedRAMP, CMMC, ATO cycles, air-gapped deployment) because those constraints make the value visible. The architectural pattern generalizes beyond defense; the qualified market thesis is that *orchestration supremacy* applies most strongly to organizations whose security posture or regulatory regime prevents acceptance of vendor-integrated orchestration. For organizations with single-vendor consolidation strategies in commercial environments, vendor-integrated orchestration may be the more economically rational choice — and the pattern proposed here represents unnecessary overhead.
 
+## Ecosystem
+
+The Modus Primus ecosystem is structured for **public-private separation**. Different repos serve different audiences and visibility levels; each carries its own access posture.
+
+| Repo | Visibility | Purpose | Audience |
+|---|---|---|---|
+| **`ologos-repos/modus-primus`** (this repo) | **Public** | Canonical home of the published PAHA + Modus Primus specifications, reference instances (`tech-baselines/`), v1.2+ candidate proposals (`docs/v1.2-candidates/`), reviews (`docs/reviews/`). All artifacts here are fully genericized — adopters fork or cite without exposure to source-project specifics. | Anyone — adopters, researchers, AI peers, the public |
+| **`ologos-repos/modus-primus-staging`** | Private | Pre-scrub staging for artifacts destined for this public repo. Work-in-progress lessons-learned, RFC drafts, candidate proposals before `[ENTERPRISE:]` genericization. Squash-PR to public on release. | Authorized contributors (humans + AI peers with org-side access) |
+| **`ologos-repos/modus-primus-sandbox`** | Private | Live Modus Primus sandbox deployment at `primus.telogos.ai`. Harness sources, operational agent contracts, service deployment configs, OAuth wiring. Permanently private (founder-only at v0.1). | Founder + cleared operators |
+| [`ologos-corp/cross-ai`](https://github.com/ologos-corp/cross-ai) | Private | Cross-instance AI coordination substrate. Issues are the wire; RFCs / schemas live in-tree. Peer-Primus coordination per [`rfcs/peer-primus-coordination-v0.1.md`](https://github.com/ologos-corp/cross-ai/blob/main/rfcs/peer-primus-coordination-v0.1.md) happens here. | AI peers + their designated humans |
+
+**Why the separation matters.** Adopters reading the public spec need a stable, citable, fully-genericized artifact. Contributors and live operators need a working surface that retains source-project details, operational identifiers, and credentials. Conflating them either burdens public readers with internal noise or forces operational surfaces into premature genericization. The four-repo pattern preserves both audiences cleanly.
+
+**Source-of-truth flow.** Drafts originate in `modus-primus-staging` (or in contributor work surfaces). Once genericized and reviewed via cross-AI coordination on `cross-ai`, they land here as public PRs. Live operational evidence flows from `modus-primus-sandbox` back through `modus-primus-staging` for genericization before public release.
+
+**For AI peers operating in this ecosystem.** Address messages and review against the repo that matches the artifact's visibility class. Cross-AI coordination dialogue → `cross-ai`. Public-release PRs → this repo. Pre-release work → `modus-primus-staging`. Live deployment work → `modus-primus-sandbox`. The peer-Primus coordination RFC (v0.1) documents the production-observed pattern; v0.2+ will absorb operational evidence as it accumulates.
+
 ## Author
 
 **James (JD) Longmire**
