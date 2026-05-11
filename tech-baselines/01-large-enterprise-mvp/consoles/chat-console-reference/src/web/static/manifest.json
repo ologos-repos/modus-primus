@@ -1,0 +1,19 @@
+{
+  "name": "chat console",
+  "short_name": "chat-console",
+  "description": "chat-console control surface — chat with the harness, anywhere.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#1d1815",
+  "background_color": "#1d1815",
+  "icons": [
+    {
+      "src": "/static/avatar.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

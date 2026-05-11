@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xmi:XMI xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20131001" xmlns:sysml="http://www.omg.org/spec/SysML/20150709/SysML" xmi:version="2.5.1">
+  <xmi:Documentation exporter="DrawioToCameo" exporterVersion="1.0.0" exporterID="[ENTERPRISE: org identifier]" />
+  <uml:Model xmi:type="uml:Model" xmi:id="_model_2c71df5a0dd5" name="aws-3tier-web-architecture">
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_prof_655367f86763">
+      <appliedProfile xmi:type="uml:Profile" href="http://www.omg.org/spec/SysML/20150709/SysML.xmi#SysML" />
+    </profileApplication>
+    <packagedElement xmi:type="uml:Package" xmi:id="_pkg_36676e306efa" name="ImportedDiagram">
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_e3e3339fac31" name="AWS 3-Tier Web Architecture">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_bfd745ea627e">
+          <body>Position: x=350.0, y=20.0, w=400.0, h=40.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_064761d68e9f" name="Element_vpc">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_423681574ad6">
+          <body>&lt;&lt;block&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_6b9d3a123f66">
+          <body>Position: x=180.0, y=120.0, w=740.0, h=650.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_a705e075af77" name="VPC">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_43da1686857a">
+          <body>Position: x=190.0, y=125.0, w=60.0, h=30.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_62657f75db50" name="Element_public-subnet">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_d023b0a6e4b9">
+          <body>&lt;&lt;block&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_b2b180cc749a">
+          <body>Position: x=200.0, y=180.0, w=700.0, h=180.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_00935713dd42" name="Public Subnet">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_61b28ffbd92a">
+          <body>Position: x=210.0, y=185.0, w=120.0, h=25.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_ec0cd783a30f" name="Element_private-subnet-app">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_3104140deeeb">
+          <body>&lt;&lt;block&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_23c3d0a2074d">
+          <body>Position: x=200.0, y=380.0, w=700.0, h=180.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_3d401d54a0cb" name="Private Subnet - Application Tier">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_e0132d4a7edf">
+          <body>Position: x=210.0, y=385.0, w=250.0, h=25.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_93c4a1f944d4" name="Element_private-subnet-data">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_ae564236f540">
+          <body>&lt;&lt;block&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_c985daa75c8b">
+          <body>Position: x=200.0, y=580.0, w=700.0, h=170.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_f6657335c782" name="Private Subnet - Data Tier">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_5cf2c039a44d">
+          <body>Position: x=210.0, y=585.0, w=200.0, h=25.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_f143338bdaba" name="Users">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_155bc4e2e23f">
+          <body>&lt;&lt;actor&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_40670286994c">
+          <body>Position: x=20.0, y=80.0, w=78.0, h=78.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_e972006b3ad2" name="Internet Users">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_f5f23c38bb66">
+          <body>Position: x=9.0, y=160.0, w=100.0, h=20.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_0fe059ebf6b2" name="Element_cloudfront">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_6d92e4d16623">
+          <body>&lt;&lt;external&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_d436cfd1b45e">
+          <body>Position: x=240.0, y=230.0, w=70.0, h=70.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_ce96093e0b0e" name="CloudFront (CDN)">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_37d8fb5105d4">
+          <body>Position: x=235.0, y=300.0, w=80.0, h=30.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_40cd2449bf4a" name="ALB">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_00cadc0a09ae">
+          <body>&lt;&lt;networkResource&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_a41acbdf1320">
+          <body>Position: x=510.0, y=230.0, w=70.0, h=70.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_4c23d6d086b8" name="Application Load Balancer">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_3a75b8755217">
+          <body>Position: x=495.0, y=300.0, w=100.0, h=30.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_cdc22cc6ccf6" name="NAT Gateway">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_ff6f19e00363">
+          <body>&lt;&lt;networkResource&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_162df3be3036">
+          <body>Position: x=780.0, y=230.0, w=70.0, h=70.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_de9a9c4526ad" name="NAT Gateway">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_49212e0eeb85">
+          <body>Position: x=780.0, y=300.0, w=70.0, h=30.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_0e4f430c60be" name="resourceIcon">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_566f19760002">
+          <body>&lt;&lt;aws_resource&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_14998b051c19">
+          <body>Position: x=340.0, y=430.0, w=70.0, h=70.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_534dc5f3ecfc" name="EC2 Web Server">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_bb230f9efc49">
+          <body>Position: x=330.0, y=500.0, w=90.0, h=30.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_a76d5046bfd7" name="resourceIcon">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_b6ee8df940b4">
+          <body>&lt;&lt;aws_resource&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_1020ebac9bb2">
+          <body>Position: x=510.0, y=430.0, w=70.0, h=70.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_2d4ec88df7b9" name="EC2 Web Server">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_8fd668879d61">
+          <body>Position: x=500.0, y=500.0, w=90.0, h=30.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_7994f3393b7f" name="resourceIcon">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_8eab05ca30ed">
+          <body>&lt;&lt;aws_resource&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_41be85f75f2b">
+          <body>Position: x=680.0, y=430.0, w=70.0, h=70.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_8be327f3e00b" name="EC2 Web Server">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_bd52607d9b9b">
+          <body>Position: x=670.0, y=500.0, w=90.0, h=30.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_1764dad28175" name="resourceIcon">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_ec01ffdad349">
+          <body>&lt;&lt;aws_resource&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_234ea0346cff">
+          <body>Position: x=380.0, y=630.0, w=70.0, h=70.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_8f10807cb52c" name="RDS Primary">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_c9b39d922b69">
+          <body>Position: x=380.0, y=700.0, w=70.0, h=30.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_4e89ace94a6f" name="resourceIcon">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_dfde74ded4f6">
+          <body>&lt;&lt;aws_resource&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_699787621bf1">
+          <body>Position: x=640.0, y=630.0, w=70.0, h=70.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_8dd7e534d4f3" name="RDS Read Replica">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_27177261a9cc">
+          <body>Position: x=625.0, y=700.0, w=100.0, h=30.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_49bac2fb3ec3" name="resourceIcon">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_29a126f8b122">
+          <body>&lt;&lt;aws_resource&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_d482ae6f9965">
+          <body>Position: x=960.0, y=430.0, w=70.0, h=70.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_5e4ec8c63e93" name="S3 Static Assets">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_fe8f63370bb7">
+          <body>Position: x=950.0, y=500.0, w=90.0, h=30.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_elem_f8a8ed4f0e96" name="Internet Gateway">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_cmt_2b02474a4ae0">
+          <body>&lt;&lt;networkResource&gt;&gt; Imported from Draw.io</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_05a0c6d09d36">
+          <body>Position: x=130.0, y=230.0, w=50.0, h=50.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_c95a751628f2" name="Internet Gateway">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_cb498b9ee86f">
+          <body>Position: x=120.0, y=280.0, w=70.0, h=30.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_1a9266df8ced" name="Availability Zone A">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_e76d8d1afca2">
+          <body>Position: x=320.0, y=535.0, w=110.0, h=20.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Comment" xmi:id="_elem_1ea366d8b7bb" name="Availability Zone B">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_geom_df8bcdd64c84">
+          <body>Position: x=660.0, y=535.0, w=110.0, h=20.0</body>
+        </ownedComment>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_conn_9dcf61026927">
+        <memberEnd xmi:idref="_conn_9dcf61026927_end1" />
+        <memberEnd xmi:idref="_conn_9dcf61026927_end2" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_9dcf61026927_end1" type="_elem_f143338bdaba" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_9dcf61026927_end2" type="_elem_0fe059ebf6b2" />
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_conn_c815c780244a">
+        <memberEnd xmi:idref="_conn_c815c780244a_end1" />
+        <memberEnd xmi:idref="_conn_c815c780244a_end2" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_c815c780244a_end1" type="_elem_0fe059ebf6b2" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_c815c780244a_end2" type="_elem_40cd2449bf4a" />
+      </packagedElement>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_conn_8f04574e3664">
+        <client xmi:idref="_elem_0fe059ebf6b2" />
+        <supplier xmi:idref="_elem_49bac2fb3ec3" />
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_conn_137e27234960">
+        <memberEnd xmi:idref="_conn_137e27234960_end1" />
+        <memberEnd xmi:idref="_conn_137e27234960_end2" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_137e27234960_end1" type="_elem_40cd2449bf4a" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_137e27234960_end2" type="_elem_0e4f430c60be" />
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_conn_14d2ecb1896a">
+        <memberEnd xmi:idref="_conn_14d2ecb1896a_end1" />
+        <memberEnd xmi:idref="_conn_14d2ecb1896a_end2" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_14d2ecb1896a_end1" type="_elem_40cd2449bf4a" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_14d2ecb1896a_end2" type="_elem_a76d5046bfd7" />
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_conn_0f163d09a9ba">
+        <memberEnd xmi:idref="_conn_0f163d09a9ba_end1" />
+        <memberEnd xmi:idref="_conn_0f163d09a9ba_end2" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_0f163d09a9ba_end1" type="_elem_40cd2449bf4a" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_0f163d09a9ba_end2" type="_elem_7994f3393b7f" />
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_conn_03daa9fad55b">
+        <memberEnd xmi:idref="_conn_03daa9fad55b_end1" />
+        <memberEnd xmi:idref="_conn_03daa9fad55b_end2" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_03daa9fad55b_end1" type="_elem_a76d5046bfd7" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_03daa9fad55b_end2" type="_elem_1764dad28175" />
+      </packagedElement>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_conn_19d2971717b0" name="Replication">
+        <client xmi:idref="_elem_1764dad28175" />
+        <supplier xmi:idref="_elem_4e89ace94a6f" />
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_conn_a1b8c00ad843">
+        <memberEnd xmi:idref="_conn_a1b8c00ad843_end1" />
+        <memberEnd xmi:idref="_conn_a1b8c00ad843_end2" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_a1b8c00ad843_end1" type="_elem_f143338bdaba" />
+        <ownedEnd xmi:type="uml:Property" xmi:id="_conn_a1b8c00ad843_end2" type="_elem_f8a8ed4f0e96" />
+      </packagedElement>
+    </packagedElement>
+  </uml:Model>
+</xmi:XMI>

@@ -1,0 +1,13 @@
+# Ignore everything under data/ (workspaces, *.sqlite, audit.jsonl) BUT
+# allow the ollama host config — it's repo-versioned configuration, not
+# runtime state. (`data/` alone would block files inside; this form lets
+# git see the dir and unignore specific files.)
+data/*
+!data/ollama_hosts.json
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
