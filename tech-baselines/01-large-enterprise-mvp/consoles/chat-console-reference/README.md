@@ -2,6 +2,12 @@
 
 Sanitized reference implementation of the operational interaction console layer of a Modus Primus instance. Lives under [`tech-baselines/01-large-enterprise-mvp/consoles/chat-console-reference/`](.) and is referenced from the parent baseline's `mechanisms/tools.md` as the concrete artifact for the chat-console operational mechanism.
 
+<p align="center">
+  <img src="../../../../docs/assets/figures/paha-fig-2-meta-harness-with-consoles-agents.png" alt="PAHA Figure 2 — Meta-harness with fit-for-purpose consoles and composable agents" width="900"/>
+</p>
+
+This kit is one concrete realization of the **Console** surface in the PAHA diagram above — the human-facing interaction layer between operators and the agents catalog, inheriting governance from the meta-harness while exposing a domain-specialized operational surface. Sibling [`agents-console-reference/`](../agents-console-reference/) realizes the agent-operations surface.
+
 ## What this is
 
 A working chat console implementation that serves as the **human-interaction surface** for a Modus Secundus enclave. Engineers, SREs, and analysts engage agents through this surface; agent findings and proposals route back through it. Operates against the audit federation bus; provides explainability surfaces for findings.

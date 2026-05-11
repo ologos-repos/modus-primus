@@ -2,6 +2,12 @@
 
 A populated Modus Primus instance for a hypothetical sovereignty-bounded large enterprise. First enclave, scoped to three enterprise IT functions: **Development (DevOps)**, **IT Infrastructure & Operations (ITIO)**, and **Cybersecurity & Compliance (CyberOps)**. Snapshot artifact for [PAHA Rev 2.2](https://doi.org/10.5281/zenodo.20112631) + [Modus Primus v1.1](https://doi.org/10.5281/zenodo.20113785).
 
+<p align="center">
+  <img src="../../docs/assets/figures/modus-primus-fig-2-wbs-layer-architecture.png" alt="Modus Primus Figure 2 — The architectural layers that constitute a Modus Primus instance" width="900"/>
+</p>
+
+This baseline populates every layer of the Work Breakdown Structure above for the large-enterprise persona. The boot manifest (`mode.md`) orients the meta-harness load; the five-M layer declares purposive disposition; orchestration sequences; the agent layer realizes role-bound execution; the mechanism layer inventories operationally available capacity; execution governance enforces policy at runtime; and the observability + assurance layer surfaces drift, coherence, deviation, and explainability per `tech-baseline.md` B.10.
+
 ## What this is
 
 A reference instance showing how a large enterprise might populate the Modus Primus WBS for its first Modus Secundus deployment across the three IT functions that bear the heaviest AI-agent leverage. The instance is concrete enough to evaluate the spec against real artifacts and abstract enough to be portable across the qualified market (PAHA §14): regulated finance, defense IT, intelligence, healthcare. Vertical-specific decisions are marked with `[ENTERPRISE:]` placeholders following the spec's own convention.
@@ -88,6 +94,16 @@ The catalog's value depends on the cross-domain agents being real, not nominal:
 - `compliance-evidence-agent` consumes the federation audit bus that all agents emit to; its findings feed back to all three domains.
 
 These cross-cutting agents enforce the domain decomposition operationally. Without them, agents drift into siloed automation and the three-domain structure becomes nominal.
+
+### Audit lifecycle anchoring cross-cutting evidence flow
+
+`compliance-evidence-agent`'s consumption of the federation audit bus realizes the four-stage audit lifecycle that ties governance-declared obligations to retained evidence:
+
+<p align="center">
+  <img src="../../docs/assets/figures/modus-primus-fig-3-audit-lifecycle.png" alt="Modus Primus Figure 3 — The Audit Lifecycle (declare → emit → store and query → retain)" width="900"/>
+</p>
+
+Per the spec: `morals.md` + `execution-policy.md` *declare* what must be audited; `execution-runtime.md` *emits* audit records at runtime; observability infrastructure *stores and queries*; `memory.md` *retains* per the declared policy. Each agent contract in this baseline names which of these touchpoints it participates in.
 
 ## Snapshot, not living
 
