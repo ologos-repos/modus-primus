@@ -2,8 +2,8 @@
 
 **A Capability-Centric Framework for Governed AI Ecosystems in Sovereignty-Bounded Enterprises**
 
-[![DOI — PAHA](https://zenodo.org/badge/DOI/10.5281/zenodo.20112631.svg)](https://doi.org/10.5281/zenodo.20112631)
-[![DOI — Modus Primus](https://zenodo.org/badge/DOI/10.5281/zenodo.20113785.svg)](https://doi.org/10.5281/zenodo.20113785)
+[![DOI — PAHA](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20112631-blue.png)](https://doi.org/10.5281/zenodo.20112631)
+[![DOI — Modus Primus](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20113785-blue.png)](https://doi.org/10.5281/zenodo.20113785)
 
 This repository is the public home of two complementary documents:
 
