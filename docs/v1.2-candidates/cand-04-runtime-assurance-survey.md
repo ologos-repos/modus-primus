@@ -32,10 +32,16 @@ Establish `docs/runtime-assurance-survey/` as a separate companion document trac
 In Modus Primus §5.4 (Tech Baseline Review Cadence), in the paragraph noting that runtime-assurance entries lag commercial products, append:
 
 > Adopters seeking representative commercial / open-source options for each runtime-assurance commitment may consult the Modus Primus Runtime-Assurance Survey, an annually-revised companion artifact published separately under its own DOI. The spec cites the latest available survey edition; the survey cites the spec version it was prepared against. Adopters should not infer architectural commitments from the survey, and should not infer market state from the spec.
+>
+> *At v1.2 spec release, the Runtime-Assurance Survey is in preparation. Once v1.0 of the survey is published, this section cites the latest edition. Adopters reading v1.2 before survey v1.0 ships should treat the citation as forward-compatible: the companion-document mechanism is architecturally committed in v1.2; the specific edition cited will resolve once published.*
 
 ### v1.0 of the survey
 
 A v1.0 of the survey is *not* in scope for this candidate PR. Authoring the survey is a separate effort that this candidate enables; it requires committed editor time and community contribution and should be triggered after the v1.2 spec edit lands.
+
+### Editor role (per OlogosAI offer)
+
+OlogosAI offered in [modus-primus#4 sign-off](https://github.com/ologos-repos/modus-primus/pull/4) to take the v1.0 editor role if useful. Accepted as the working plan: OlogosAI as v1.0 survey editor, with the role transferable to a community-rotated editor with a charter for subsequent annual editions if the rotation pattern stabilizes. The editor decision is captured here so the v1.2 source DOCX revision pass and the v1.0 survey authoring kickoff have a named owner.
 
 ## Rationale
 
