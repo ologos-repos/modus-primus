@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 from aiohttp.test_utils import TestClient, TestServer
 
-from app import build_app
+from app import REGISTRY_KEY, build_app
 from turns import TurnBuffer, TurnEvent
 
 
@@ -311,6 +311,75 @@ async def test_patch_session_caps_title_length(turns_dir, tmp_path, monkeypatch)
         resp = await client.patch(f"/sessions/{sid}", json={"title": long_title})
         assert resp.status == 200
         assert len((await resp.json())["title"]) == 200
+
+
+async def test_delete_session_removes_history_rows_files_and_buffers(
+    turns_dir, tmp_path, monkeypatch
+):
+    """DELETE /sessions/{id} drops history rows, custom title, on-disk turn
+    artifacts, and live registry buffers belonging to the session."""
+    monkeypatch.setenv("CHAT_CONSOLE_HISTORY", str(tmp_path / "history.sqlite"))
+    app = build_app(generator=_slow_generator)
+    async with TestServer(app) as server, TestClient(server) as client:
+        # Two turns in the same session.
+        first = await (await client.post(
+            "/turns", json={"prompt": "first"}
+        )).json()
+        sid = first["session_id"]
+        second = await (await client.post(
+            "/turns", json={"prompt": "second", "session_id": sid}
+        )).json()
+        # Let both turns drain to done so history rows are written.
+        for tid in (first["turn_id"], second["turn_id"]):
+            for _ in range(500):
+                s = await (await client.get(f"/turns/{tid}")).json()
+                if s["status"] in ("done", "error"):
+                    break
+                await asyncio.sleep(0.01)
+        # Custom title so we also exercise the `sessions` row delete.
+        await client.patch(f"/sessions/{sid}", json={"title": "to be gone"})
+
+        # Pre-condition: session shows up, files exist.
+        sessions = (await (await client.get("/sessions")).json())["sessions"]
+        assert any(s["session_id"] == sid for s in sessions)
+        for tid in (first["turn_id"], second["turn_id"]):
+            assert (turns_dir / f"{tid}.jsonl").exists()
+            assert (turns_dir / f"{tid}.meta.json").exists()
+
+        # Delete + verify.
+        resp = await client.delete(f"/sessions/{sid}")
+        assert resp.status == 200
+        body = await resp.json()
+        assert body["ok"] is True
+        assert body["session_id"] == sid
+        assert body["deleted_turns"] >= 2
+
+        # Session no longer in list.
+        sessions = (await (await client.get("/sessions")).json())["sessions"]
+        assert not any(s["session_id"] == sid for s in sessions)
+        # On-disk artifacts swept.
+        for tid in (first["turn_id"], second["turn_id"]):
+            assert not (turns_dir / f"{tid}.jsonl").exists()
+            assert not (turns_dir / f"{tid}.meta.json").exists()
+        # Registry buffers cleared for this session.
+        registry = app[REGISTRY_KEY]
+        for buf in registry._turns.values():
+            assert buf.session_id != sid
+
+
+async def test_delete_unknown_session_is_idempotent(
+    turns_dir, tmp_path, monkeypatch
+):
+    """Deleting a session that doesn't exist must succeed quietly with
+    deleted_turns=0."""
+    monkeypatch.setenv("CHAT_CONSOLE_HISTORY", str(tmp_path / "history.sqlite"))
+    app = build_app(generator=_slow_generator)
+    async with TestServer(app) as server, TestClient(server) as client:
+        resp = await client.delete("/sessions/does-not-exist")
+        assert resp.status == 200
+        body = await resp.json()
+        assert body["ok"] is True
+        assert body["deleted_turns"] == 0
 
 
 async def test_turn_writes_meta_sidecar(turns_dir):

@@ -6,18 +6,19 @@
 <meta name="theme-color" content="#1d1815">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="chat-console">
-<title>chat console</title>
+<meta name="apple-mobile-web-app-title" content="{{PERSONA_NAME}}">
+<title>{{PERSONA_NAME}} · {{MODEL_NAME}}</title>
 <link rel="manifest" href="/static/manifest.json">
 <link rel="icon" type="image/png" href="/static/avatar.png">
 <link rel="apple-touch-icon" href="/static/avatar.png">
-<link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="/static/style.css?v={{ASSET_VERSION}}">
 </head>
 <body>
 <div class="layout">
   <header class="topbar">
     <button class="menu-btn" id="sidebar-toggle" aria-label="Toggle sidebar">≡</button>
-    <span class="brand">chat console</span>
+    <span class="brand">{{PERSONA_NAME}}</span>
+    <span class="brand-model muted" title="active model">{{MODEL_NAME}}</span>
     <span class="spacer"></span>
     <button class="icon-btn" id="notif-btn" aria-label="Enable notifications" title="Enable notifications" hidden>🔔</button>
     <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">◐</button>
@@ -57,6 +58,6 @@
 
 <script src="/static/marked.min.js"></script>
 <script src="/static/dompurify.min.js"></script>
-<script src="/static/app.js"></script>
+<script src="/static/app.js?v={{ASSET_VERSION}}"></script>
 </body>
 </html>

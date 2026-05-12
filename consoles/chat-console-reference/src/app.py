@@ -85,6 +85,7 @@ def build_app(generator: Generator | None = None) -> web.Application:
     app.router.add_get("/sessions", list_sessions)
     app.router.add_get("/sessions/{session_id}", get_session)
     app.router.add_patch("/sessions/{session_id}", patch_session)
+    app.router.add_delete("/sessions/{session_id}", delete_session)
     app.router.add_get("/sessions/{session_id}/turns", list_session_turns)
     app.router.add_get(
         "/sessions/{session_id}/turns/{turn_id}", get_session_turn
@@ -102,12 +103,38 @@ def build_app(generator: Generator | None = None) -> web.Application:
     index_path = web_dir / "index.html"
     sw_path = web_dir / "static" / "sw.js"
 
+    static_dir = web_dir / "static"
+
+    def _asset_version() -> str:
+        """Cache-busting tag derived from the newest mtime under web/static.
+        Bumps automatically on any deploy that updates JS/CSS, so browsers
+        revalidate without operators having to hard-refresh.
+        """
+        try:
+            newest = max(
+                p.stat().st_mtime
+                for p in static_dir.rglob("*")
+                if p.is_file()
+            )
+            return str(int(newest))
+        except (OSError, ValueError):
+            return "0"
+
     async def serve_index(_req: web.Request) -> web.Response:
         agents_url = os.environ.get(
             "AGENTS_CONSOLE_URL", "http://localhost:8081/agents-console"
         )
+        persona = os.environ.get("CHAT_CONSOLE_PERSONA_NAME", "chat console")
+        model = (
+            os.environ.get("CHAT_CONSOLE_MODEL")
+            or os.environ.get("OLLAMA_MODEL")
+            or ""
+        )
         html = index_path.read_text()
         html = html.replace("{{AGENTS_CONSOLE_URL}}", agents_url)
+        html = html.replace("{{PERSONA_NAME}}", persona)
+        html = html.replace("{{MODEL_NAME}}", model)
+        html = html.replace("{{ASSET_VERSION}}", _asset_version())
         return web.Response(text=html, content_type="text/html")
 
     async def serve_sw(_req: web.Request) -> web.FileResponse:
@@ -487,6 +514,70 @@ async def patch_session(request: web.Request) -> web.Response:
     history = request.app[HISTORY_KEY]
     history.set_custom_title(session_id, title)
     return web.json_response({"ok": True, "session_id": session_id, "title": title})
+
+
+async def delete_session(request: web.Request) -> web.Response:
+    """Permanently delete a session — history rows, custom title, on-disk
+    turn JSONLs, sidecar metas, and any in-memory registry buffers.
+
+    Idempotent: deleting an unknown session_id returns ok with deleted=0.
+    """
+    session_id = request.match_info["session_id"]
+    history = request.app[HISTORY_KEY]
+    registry = request.app[REGISTRY_KEY]
+    data_dir = Path(
+        os.environ.get("CHAT_CONSOLE_TURNS")
+        or os.environ.get("THINX_TURNS")
+        or "./turns"
+    )
+
+    turn_ids = history.delete_session(session_id)
+
+    # Drop matching live registry buffers (1h retention may still hold them).
+    for tid in list(registry._turns.keys()):
+        buf = registry._turns.get(tid)
+        if buf is not None and buf.session_id == session_id:
+            registry._turns.pop(tid, None)
+            registry._created_at.pop(tid, None)
+            if tid not in turn_ids:
+                turn_ids.append(tid)
+
+    # Sweep on-disk turn artifacts. Match by exact turn_id from history; also
+    # sweep any orphan meta sidecars whose session_id matches (covers turns
+    # that were registry-only when they were created).
+    removed_files = 0
+    for tid in turn_ids:
+        for suffix in (".jsonl", ".meta.json"):
+            p = data_dir / f"{tid}{suffix}"
+            if p.exists():
+                try:
+                    p.unlink()
+                    removed_files += 1
+                except OSError:
+                    pass
+    if data_dir.exists():
+        for meta_path in data_dir.glob("*.meta.json"):
+            try:
+                meta = json.loads(meta_path.read_text())
+            except (OSError, json.JSONDecodeError):
+                continue
+            if meta.get("session_id") != session_id:
+                continue
+            jsonl_path = data_dir / f"{meta.get('turn_id', '')}.jsonl"
+            for p in (meta_path, jsonl_path):
+                if p.exists():
+                    try:
+                        p.unlink()
+                        removed_files += 1
+                    except OSError:
+                        pass
+
+    return web.json_response({
+        "ok": True,
+        "session_id": session_id,
+        "deleted_turns": len(turn_ids),
+        "removed_files": removed_files,
+    })
 
 
 async def list_session_turns(request: web.Request) -> web.Response:

@@ -278,6 +278,29 @@ class SessionHistory:
                 (session_id, title),
             )
 
+    def delete_session(self, session_id: str) -> list[str]:
+        """Drop every history row + the custom_title for `session_id`.
+
+        Returns the list of turn_ids that were deleted, so the caller can
+        also clean up the matching on-disk JSONL + meta sidecars (in
+        `CHAT_CONSOLE_TURNS`) and any live `TurnRegistry` buffers.
+        """
+        with self._conn() as con:
+            turn_ids = [
+                row["turn_id"]
+                for row in con.execute(
+                    "SELECT turn_id FROM history_turns WHERE session_id = ?",
+                    (session_id,),
+                ).fetchall()
+            ]
+            con.execute(
+                "DELETE FROM history_turns WHERE session_id = ?", (session_id,)
+            )
+            con.execute(
+                "DELETE FROM sessions WHERE session_id = ?", (session_id,)
+            )
+        return turn_ids
+
 
 def _truncate_title(text: Optional[str], max_chars: int) -> str:
     """Trim to <max_chars>, breaking at a word boundary when possible."""

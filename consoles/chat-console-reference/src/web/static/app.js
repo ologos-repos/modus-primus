@@ -1061,6 +1061,7 @@
                     `<div class="session-row${isActive ? " active" : ""}" data-session-id="${escapeHtml(s.session_id)}">` +
                     `<span class="session-title" title="${titleHtml}">${titleHtml}</span>` +
                     `<button class="session-rename" type="button" title="Rename">✎</button>` +
+                    `<button class="session-delete" type="button" title="Delete session">🗑</button>` +
                     `<span class="session-meta muted">${s.turn_count}t · ${ageStr}</span>` +
                     `</div>`;
             }
@@ -1080,7 +1081,8 @@
     }
 
     // Click delegation: header toggles expand/collapse; row click switches
-    // session; pencil click renames; active row click is a no-op (#30).
+    // session; pencil click renames; trash click deletes; active row click
+    // is a no-op (#30).
     sessionsEl?.addEventListener("click", async (e) => {
         const header = e.target.closest(".sessions-header");
         if (header) {
@@ -1089,10 +1091,16 @@
             refreshSessions();  // re-render with toggled state
             return;
         }
+        const deleteBtn = e.target.closest(".session-delete");
         const renameBtn = e.target.closest(".session-rename");
         const row = e.target.closest(".session-row");
         if (!row) return;
         const sessionId = row.dataset.sessionId;
+        if (deleteBtn) {
+            e.stopPropagation();
+            await armedDelete(deleteBtn, row, sessionId);
+            return;
+        }
         if (renameBtn) {
             e.stopPropagation();
             beginRename(row, sessionId);
@@ -1101,6 +1109,60 @@
         if (sessionId === state.sessionId) return;  // active — no-op
         switchSession(sessionId);
     });
+
+    // Two-step armed-button delete. First click turns the trash red + ✕ and
+    // labels "click again to confirm" for 4 seconds; second click within
+    // that window fires DELETE. Avoids `window.confirm()` (suppressed by
+    // some browsers when fired from a delegated handler).
+    const ARM_TIMEOUT_MS = 4000;
+    async function armedDelete(btn, row, sessionId) {
+        if (btn.dataset.armed !== "1") {
+            btn.dataset.armed = "1";
+            btn.classList.add("armed");
+            btn.textContent = "✕";
+            btn.title = "Click again to confirm delete";
+            const armedFor = btn;
+            setTimeout(() => {
+                if (armedFor.dataset.armed === "1") {
+                    armedFor.dataset.armed = "";
+                    armedFor.classList.remove("armed");
+                    armedFor.textContent = "🗑";
+                    armedFor.title = "Delete session";
+                }
+            }, ARM_TIMEOUT_MS);
+            return;
+        }
+        btn.dataset.armed = "";
+        btn.classList.remove("armed");
+        btn.disabled = true;
+        try {
+            const resp = await fetch(
+                `/sessions/${encodeURIComponent(sessionId)}`,
+                { method: "DELETE" }
+            );
+            if (!resp.ok) {
+                btn.disabled = false;
+                btn.textContent = "🗑";
+                btn.title = "Delete session";
+                window.alert(`Delete failed (HTTP ${resp.status}).`);
+                return;
+            }
+        } catch (err) {
+            btn.disabled = false;
+            btn.textContent = "🗑";
+            btn.title = "Delete session";
+            window.alert(`Delete failed: ${err && err.message || err}`);
+            return;
+        }
+        // If the deleted session is the active one, wipe the conversation
+        // surface and drop the session id — wrapSession is the existing
+        // "new session" reset path.
+        if (sessionId === state.sessionId) {
+            conv.innerHTML = "";
+            wrapSession();
+        }
+        refreshSessions();
+    }
 
     function beginRename(row, sessionId) {
         const titleEl = row.querySelector(".session-title");

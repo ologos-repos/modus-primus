@@ -113,6 +113,15 @@ html, body {
     font-weight: 600;
     letter-spacing: 0.02em;
 }
+.brand-model {
+    font-size: 11.5px;
+    font-weight: 400;
+    padding: 1px 6px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+}
+.brand-model:empty { display: none; }
 .spacer { flex: 1; }
 .icon-btn, .menu-btn {
     background: transparent;
@@ -263,7 +272,8 @@ html, body {
     padding: 1px 4px;
     outline: none;
 }
-.session-rename {
+.session-rename,
+.session-delete {
     background: none;
     border: none;
     color: var(--fg-muted);
@@ -271,13 +281,24 @@ html, body {
     padding: 0 4px;
     font-size: 11px;
     opacity: 0;
-    transition: opacity 0.12s ease;
+    transition: opacity 0.12s ease, color 0.12s ease;
 }
-.session-row:hover .session-rename {
+.session-row:hover .session-rename,
+.session-row:hover .session-delete {
     opacity: 1;
 }
 .session-rename:hover {
     color: var(--fg-accent);
+}
+.session-delete:hover {
+    color: var(--error);
+}
+.session-delete.armed {
+    opacity: 1 !important;
+    color: var(--error);
+    font-weight: 700;
+    background: rgba(184, 98, 76, 0.15);
+    border-radius: 2px;
 }
 .session-meta {
     flex-shrink: 0;
@@ -840,7 +861,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    padding-top: 2px;
+    align-self: stretch;
 }
 .attach-btn {
     background: transparent;
@@ -852,8 +873,9 @@ html, body {
     cursor: pointer;
     border-radius: 3px;
     padding: 0 7px;
-    height: 22px;
-    min-width: 22px;
+    flex: 1;
+    min-height: 30px;
+    min-width: 30px;
 }
 .attach-btn:hover {
     color: var(--fg-accent);
