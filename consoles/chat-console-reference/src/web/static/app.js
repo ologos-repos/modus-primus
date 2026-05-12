@@ -1098,7 +1098,7 @@
         const sessionId = row.dataset.sessionId;
         if (deleteBtn) {
             e.stopPropagation();
-            await confirmAndDelete(row, sessionId);
+            await armedDelete(deleteBtn, row, sessionId);
             return;
         }
         if (renameBtn) {
@@ -1110,29 +1110,53 @@
         switchSession(sessionId);
     });
 
-    async function confirmAndDelete(row, sessionId) {
-        const titleEl = row.querySelector(".session-title");
-        const label = titleEl ? titleEl.textContent : sessionId;
-        const ok = window.confirm(
-            `Delete this session permanently?\n\n"${label}"\n\nAll turns and audit events for it will be removed.`
-        );
-        if (!ok) return;
+    // Two-step armed-button delete. First click turns the trash red + ✕ and
+    // labels "click again to confirm" for 4 seconds; second click within
+    // that window fires DELETE. Avoids `window.confirm()` (suppressed by
+    // some browsers when fired from a delegated handler).
+    const ARM_TIMEOUT_MS = 4000;
+    async function armedDelete(btn, row, sessionId) {
+        if (btn.dataset.armed !== "1") {
+            btn.dataset.armed = "1";
+            btn.classList.add("armed");
+            btn.textContent = "✕";
+            btn.title = "Click again to confirm delete";
+            const armedFor = btn;
+            setTimeout(() => {
+                if (armedFor.dataset.armed === "1") {
+                    armedFor.dataset.armed = "";
+                    armedFor.classList.remove("armed");
+                    armedFor.textContent = "🗑";
+                    armedFor.title = "Delete session";
+                }
+            }, ARM_TIMEOUT_MS);
+            return;
+        }
+        btn.dataset.armed = "";
+        btn.classList.remove("armed");
+        btn.disabled = true;
         try {
             const resp = await fetch(
                 `/sessions/${encodeURIComponent(sessionId)}`,
                 { method: "DELETE" }
             );
             if (!resp.ok) {
+                btn.disabled = false;
+                btn.textContent = "🗑";
+                btn.title = "Delete session";
                 window.alert(`Delete failed (HTTP ${resp.status}).`);
                 return;
             }
         } catch (err) {
+            btn.disabled = false;
+            btn.textContent = "🗑";
+            btn.title = "Delete session";
             window.alert(`Delete failed: ${err && err.message || err}`);
             return;
         }
         // If the deleted session is the active one, wipe the conversation
         // surface and drop the session id — wrapSession is the existing
-        // "new session" reset path. Also clear restored history blocks.
+        // "new session" reset path.
         if (sessionId === state.sessionId) {
             conv.innerHTML = "";
             wrapSession();

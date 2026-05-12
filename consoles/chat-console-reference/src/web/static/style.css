@@ -284,6 +284,13 @@ html, body {
 .session-delete:hover {
     color: var(--error);
 }
+.session-delete.armed {
+    opacity: 1 !important;
+    color: var(--error);
+    font-weight: 700;
+    background: rgba(184, 98, 76, 0.15);
+    border-radius: 2px;
+}
 .session-meta {
     flex-shrink: 0;
     font-size: 10.5px;
