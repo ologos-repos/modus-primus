@@ -24,8 +24,23 @@ from typing import Callable, Optional
 from .store import Run, RunStore
 
 
-_REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
-_DAEMON_MODULE = "means.agents.runtime.daemon"
+# The daemon subprocess is invoked as `python -m <daemon_module>` with cwd
+# set to a directory that makes that module importable. The defaults match
+# the canonical `means/agents/runtime/` enterprise WBS layout; deployments
+# that ship under a different package path (e.g., `src/runtime/` for the
+# small-ecosystem mvp) must override via env vars rather than relying on
+# the default's parent-count arithmetic — otherwise the spawned daemon
+# fails to import and becomes a zombie at PID-create time, leaving rows
+# stuck in `status="pending"` with no signal to the operator.
+_REPO_ROOT = Path(
+    os.environ.get(
+        "AGENTS_CONSOLE_REPO_ROOT",
+        str(Path(__file__).resolve().parent.parent.parent.parent),
+    )
+)
+_DAEMON_MODULE = os.environ.get(
+    "AGENTS_CONSOLE_DAEMON_MODULE", "means.agents.runtime.daemon"
+)
 
 
 # Spawn-process function: takes (cmd, cwd) and returns something with `.pid`.

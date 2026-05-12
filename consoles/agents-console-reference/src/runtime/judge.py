@@ -1,39 +1,73 @@
 """Judge — evaluates whether an agent run satisfies the spec's qa criteria.
 
-Phase 3: LLM-as-judge only. Spec declares `qa: {criteria: "..."}`; after
-the agent run completes, the daemon hands the run's transcript + the
-criteria to the Judge, which returns pass/fail/error + a one-sentence
-reason. Failure flips the run's status to `error`; pass leaves it `done`.
+LLM-as-judge: spec declares `qa: {criteria: "..."}`; after the agent run
+completes, the daemon hands the run's transcript + the criteria to the
+Judge, which returns pass/fail/error + a one-sentence reason. Failure
+flips the run's status to `error`; pass leaves it `done`.
 
-Uses `claude -p` for the grading itself (subscription-auth, no API key).
-The judge agent gets NO tools (KNOWN_TOOLS as denylist) so it can't
-side-effect — purely reads the transcript and emits a verdict line.
+The judge call is HTTP-direct against an Ollama-compatible /api/chat
+endpoint. agents-console is model-agnostic — there's no longer a
+subprocess CLI dependency. Judge target URL + model resolve in order:
 
-The cost shape is one extra claude call per QA-enabled run. JD's spec
-can override `qa.judge_model` to use a cheaper model (e.g. `haiku`)
-when grading doesn't need top-tier reasoning.
+  1. AGENTS_CONSOLE_JUDGE_URL / AGENTS_CONSOLE_JUDGE_MODEL (explicit)
+  2. ollama_hosts.json + spec.qa.judge_model (when judge_model carries
+     an `ollama:<host-alias>/<model-tag>` shape)
+  3. OLLAMA_URL / OLLAMA_MODEL (fallback to the same defaults the
+     OllamaBackend uses)
+
+Format-constrained JSON (Ollama `format` parameter) pins the response
+into {outcome, reason} so any Ollama-served model works regardless of
+native tool support.
 """
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
+import os
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Optional
 
+import aiohttp
+
 from ..specs.model import AgentSpec
 
-from .fork_defaults import KNOWN_TOOLS
+from .ollama_hosts import load_hosts
 from .store import Event
 
 
 logger = logging.getLogger(__name__)
 
 
-_PIPE_LIMIT = 10 * 1024 * 1024
-_DEFAULT_JUDGE_MODEL = "sonnet"
+_DEFAULT_JUDGE_MODEL_ENV = "AGENTS_CONSOLE_JUDGE_MODEL"
+_DEFAULT_JUDGE_URL_ENV = "AGENTS_CONSOLE_JUDGE_URL"
 _OUTCOMES = ("pass", "fail", "error")
+_TIMEOUT_SECONDS = 60.0
+
+
+# JSON schema passed to Ollama's `format` parameter — pins the reply shape.
+_VERDICT_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "outcome": {
+            "type": "string",
+            "enum": ["pass", "fail"],
+        },
+        "reason": {
+            "type": "string",
+            "description": "one short sentence",
+        },
+    },
+    "required": ["outcome", "reason"],
+}
+
+
+_SYSTEM_PROMPT = (
+    "You are a strict QA judge. You read pass criteria and the transcript "
+    "of an agent run, then emit a verdict object: "
+    "{\"outcome\": \"pass\"|\"fail\", \"reason\": \"<one short sentence>\"}. "
+    "Reply with ONLY the JSON object — no prose, no markdown."
+)
 
 
 @dataclass
@@ -47,8 +81,7 @@ class JudgeResult:
 
 
 class Judge(ABC):
-    """Pluggable verdict-emitter. Phase 3 ships LLMJudge; future phases may
-    add code-based judges (deterministic predicates) under the same ABC."""
+    """Pluggable verdict-emitter."""
 
     @abstractmethod
     async def judge(
@@ -61,20 +94,17 @@ class Judge(ABC):
 
 
 class LLMJudge(Judge):
-    """Grades an agent run by asking another claude instance.
-
-    Verdict format: the judge MUST emit one line starting with `PASS:` or
-    `FAIL:` followed by a short reason. Anything else → outcome=error,
-    which the daemon also treats as a run failure.
+    """Ollama-backed LLM-as-judge. Verdict comes back as format-constrained
+    JSON; any Ollama-served model works.
     """
 
     def __init__(
         self,
-        binary: str = "claude",
-        default_model: str = _DEFAULT_JUDGE_MODEL,
+        base_url: Optional[str] = None,
+        model: Optional[str] = None,
     ):
-        self.binary = binary
-        self.default_model = default_model
+        self._base_url_override = base_url
+        self._model_override = model
 
     async def judge(
         self,
@@ -84,54 +114,77 @@ class LLMJudge(Judge):
     ) -> JudgeResult:
         criteria = (spec.qa or {}).get("criteria")
         if not criteria:
-            # No criteria → vacuous pass (daemon shouldn't have called us, but be safe)
             return JudgeResult("pass", "no qa criteria")
 
-        model = (spec.qa or {}).get("judge_model") or self.default_model
-        transcript = _format_transcript(events)
-        judge_prompt = _build_prompt(criteria, prompt, transcript)
+        try:
+            base_url, model = self._resolve_target(spec)
+        except ValueError as e:
+            return JudgeResult("error", f"judge config: {e}")
 
-        # Judge gets NO tools — denylist everything; it should reason from
-        # the transcript alone, not poke the filesystem.
-        deny = " ".join(sorted(KNOWN_TOOLS))
-        cmd = [
-            self.binary,
-            "--output-format", "text",
-            "--system-prompt",
-            (
-                "You are a strict QA judge. You read a description of pass criteria "
-                "and the transcript of an agent run, and you emit a single-line "
-                "verdict. Reply with EXACTLY ONE line, formatted as:\n"
-                "PASS: <one short reason>\n"
-                "or\n"
-                "FAIL: <one short reason>\n"
-                "Do not output anything else."
-            ),
-            "--model", model,
-            "--disallowedTools", deny,
-            "--dangerously-skip-permissions",
-            "-p", judge_prompt,
-        ]
+        transcript = _format_transcript(events)
+        user_msg = _build_user_message(criteria, prompt, transcript)
+        body = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": _SYSTEM_PROMPT},
+                {"role": "user", "content": user_msg},
+            ],
+            "format": _VERDICT_SCHEMA,
+            "stream": False,
+            "options": {"temperature": 0.0},
+        }
+        url = f"{base_url.rstrip('/')}/api/chat"
+        timeout = aiohttp.ClientTimeout(total=_TIMEOUT_SECONDS)
 
         try:
-            proc = await asyncio.create_subprocess_exec(
-                *cmd,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-                limit=_PIPE_LIMIT,
-            )
-        except FileNotFoundError:
-            return JudgeResult("error", f"judge binary not found: {self.binary}")
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.post(url, json=body) as resp:
+                    if resp.status >= 300:
+                        text = await resp.text()
+                        return JudgeResult(
+                            "error",
+                            f"judge HTTP {resp.status}: {text[:200]}",
+                        )
+                    data = await resp.json()
         except Exception as exc:
-            return JudgeResult("error", f"judge launch failed: {exc}")
+            return JudgeResult("error", f"judge transport: {type(exc).__name__}: {exc}")
 
-        stdout_bytes, stderr_bytes = await proc.communicate()
-        if proc.returncode != 0:
-            err = stderr_bytes.decode("utf-8", errors="replace").strip()[:300]
-            return JudgeResult("error", f"judge exited {proc.returncode}: {err or '(no stderr)'}")
+        content = ((data.get("message") or {}).get("content") or "").strip()
+        return _parse_verdict(content)
 
-        text = stdout_bytes.decode("utf-8", errors="replace").strip()
-        return _parse_verdict(text)
+    def _resolve_target(self, spec: AgentSpec) -> tuple[str, str]:
+        """Returns (base_url, model). Raises ValueError on missing config."""
+        # 1) Explicit overrides (constructor or env)
+        if self._base_url_override and self._model_override:
+            return self._base_url_override, self._model_override
+        env_url = os.environ.get(_DEFAULT_JUDGE_URL_ENV)
+        env_model = os.environ.get(_DEFAULT_JUDGE_MODEL_ENV)
+        if env_url and env_model:
+            return env_url, env_model
+
+        # 2) Spec-declared judge model in ollama:<alias>/<tag> form
+        judge_model = (spec.qa or {}).get("judge_model")
+        if judge_model and judge_model.startswith("ollama:"):
+            tag = judge_model[len("ollama:"):]
+            host_alias, sep, model_tag = tag.partition("/")
+            if sep and model_tag:
+                hosts = load_hosts()
+                if host_alias in hosts:
+                    return hosts[host_alias], model_tag
+
+        # 3) Fallback to OLLAMA_URL/MODEL (same defaults as OllamaBackend
+        #    when no host alias is in scope).
+        base = self._base_url_override or os.environ.get(
+            "OLLAMA_URL", "http://127.0.0.1:11434"
+        )
+        mdl = self._model_override or os.environ.get("OLLAMA_MODEL")
+        if not mdl:
+            raise ValueError(
+                "no judge model resolved — set AGENTS_CONSOLE_JUDGE_MODEL, "
+                "or spec.qa.judge_model='ollama:<alias>/<tag>', "
+                "or OLLAMA_MODEL"
+            )
+        return base, mdl
 
 
 def _format_transcript(events: list[Event]) -> str:
@@ -162,28 +215,37 @@ def _format_transcript(events: list[Event]) -> str:
     return "\n".join(lines) or "(empty transcript)"
 
 
-def _build_prompt(criteria: str, original_prompt: str, transcript: str) -> str:
+def _build_user_message(criteria: str, original_prompt: str, transcript: str) -> str:
     return (
         f"Pass criteria: {criteria}\n\n"
         f"Original user prompt: {original_prompt}\n\n"
         f"Agent transcript:\n{transcript}\n\n"
-        "Verdict (one line, PASS: or FAIL: only):"
+        "Return your verdict JSON."
     )
 
 
 def _parse_verdict(text: str) -> JudgeResult:
-    """Pull the first PASS:/FAIL: line out of the judge's reply."""
+    """Parse the constrained-JSON verdict."""
     if not text:
         return JudgeResult("error", "judge returned empty output")
-    first_line = text.split("\n", 1)[0].strip()
-    upper = first_line.upper()
-    if upper.startswith("PASS:"):
-        reason = first_line[len("PASS:"):].strip() or "ok"
-        return JudgeResult("pass", reason)
-    if upper.startswith("FAIL:"):
-        reason = first_line[len("FAIL:"):].strip() or "criteria not met"
-        return JudgeResult("fail", reason)
-    # Tolerate when the judge skipped the prefix and just gave a reason —
-    # treat as error so the daemon can still record + surface it. (Strict
-    # parse keeps the spec/judge contract honest.)
-    return JudgeResult("error", f"unparseable judge response: {text[:200]}")
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        start = text.find("{")
+        end = text.rfind("}")
+        if start >= 0 and end > start:
+            try:
+                parsed = json.loads(text[start : end + 1])
+            except json.JSONDecodeError:
+                return JudgeResult(
+                    "error", f"judge response not JSON: {text[:200]}"
+                )
+        else:
+            return JudgeResult(
+                "error", f"judge response had no JSON object: {text[:200]}"
+            )
+    outcome = (parsed.get("outcome") or "").strip().lower()
+    reason = (parsed.get("reason") or "").strip()[:300] or "no reason given"
+    if outcome not in ("pass", "fail"):
+        return JudgeResult("error", f"judge outcome={outcome!r} not pass/fail")
+    return JudgeResult(outcome, reason)
