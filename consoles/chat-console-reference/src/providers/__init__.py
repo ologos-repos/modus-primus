@@ -1,7 +1,10 @@
 """Provider factory. Reads [ENTERPRISE: env var] from env (or accepts an override)
 and returns the matching Provider instance.
 
-Phase 1 supports `claude-cli`. OpenAI-compatible lands in Phase 4.
+Supported:
+  - claude-cli (subprocess `claude` CLI; subscription-auth)
+  - openai    (HTTP `/v1/chat/completions`; OpenAI-compatible — works
+               with api.openai.com, LM Studio, vLLM, llama.cpp server)
 
 When CHAT_CONSOLE_INTENT_ROUTING=true, the base provider is wrapped in an
 IntentRoutingProvider that classifies each turn and dispatches "spawn-agent"
@@ -14,8 +17,9 @@ from typing import Optional
 
 from .base import Provider
 from .claude_cli import ClaudeCliProvider
+from .openai import OpenAIProvider
 
-__all__ = ["Provider", "ClaudeCliProvider", "make_provider"]
+__all__ = ["Provider", "ClaudeCliProvider", "OpenAIProvider", "make_provider"]
 
 
 def _maybe_wrap_intent_routing(base: Provider) -> Provider:
@@ -47,4 +51,6 @@ def make_provider(name: Optional[str] = None) -> Provider:
     name = (name or os.environ.get("[ENTERPRISE: env var]", "claude-cli")).strip()
     if name == "claude-cli":
         return _maybe_wrap_intent_routing(ClaudeCliProvider())
+    if name == "openai":
+        return _maybe_wrap_intent_routing(OpenAIProvider())
     raise ValueError(f"Unknown provider: {name!r}")

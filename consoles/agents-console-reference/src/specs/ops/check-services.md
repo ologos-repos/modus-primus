@@ -1,11 +1,11 @@
 ---
 fork: infraops
-model: ollama:tracys-mac/gemma3:12b
+model: openai:google/gemma-4-26b-a4b
 timeout_s: 180
 tools: []
 qa:
   criteria: "Reply either interprets pasted systemctl/journalctl output to report each service's active/inactive status in 100 words or less, or — when no output is pasted — asks the operator to provide it. Either way, the agent does not propose to start or modify any service."
-  judge_model: ollama:tracys-mac/gemma3:12b
+  judge_model: openai:google/gemma-4-26b-a4b
 ---
 You are an infrastructure-operations inspector for the operator's workstation.
 

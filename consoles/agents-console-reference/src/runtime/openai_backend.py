@@ -1,11 +1,19 @@
-"""OpenAIBackend — POST /v1/chat/completions with stream:true (SSE).
+"""OpenAIBackend — POST <base>/chat/completions with stream:true (SSE).
 
 Lines arrive as `data: {...json...}` (or `data: [DONE]` to terminate).
 Each delta has `choices[0].delta.content` for the next text token; the
 final chunk (sent because stream_options.include_usage is set) carries
 the usage block with `prompt_tokens` / `completion_tokens`.
 
-Tools/function-calling are deferred — text-only in Phase 6.
+Base URL is configurable via OPENAI_BASE_URL — defaults to
+`https://api.openai.com/v1`. Any OpenAI-compatible /v1 endpoint works:
+LM Studio (`http://host:1237/v1`), vLLM, llama.cpp server, etc. The
+backend appends `/chat/completions` to whatever base it receives, so
+operators just point at the `/v1` root of their service. API keys
+required by the upstream service are read from OPENAI_API_KEY;
+LM-Studio-style servers accept any non-empty value.
+
+Tools/function-calling are deferred — text-only.
 
 Credential safety: api_key is held privately, never appears in event
 payloads, never logged. Error events use a redacted form (status only).
@@ -24,18 +32,36 @@ from .sink import EventSink
 from .usage import normalize_usage
 
 
-_API_URL = "https://api.openai.com/v1/chat/completions"
+_DEFAULT_BASE_URL = "https://api.openai.com/v1"
 
 
 class OpenAIBackend(AgentBackend):
-    def __init__(self, model: str, api_key: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        model: str,
+        api_key: Optional[str] = None,
+        base_url: Optional[str] = None,
+    ) -> None:
         key = api_key or os.environ.get("OPENAI_API_KEY")
         if not key:
             raise RuntimeError(
-                "OPENAI_API_KEY not set — required for openai provider"
+                "OPENAI_API_KEY not set — required for openai provider "
+                "(LM-Studio-style servers accept any non-empty value)"
             )
         self._model = model
         self._api_key = key
+        self._base_url = (
+            base_url
+            or os.environ.get("OPENAI_BASE_URL")
+            or _DEFAULT_BASE_URL
+        ).rstrip("/")
+        # Tolerate operators who paste a base without /v1.
+        if not self._base_url.endswith("/v1"):
+            # Heuristic: leave alone if it already includes a versioned path,
+            # else append /v1.
+            if "/v" not in self._base_url[-6:]:
+                self._base_url = f"{self._base_url}/v1"
+        self._url = f"{self._base_url}/chat/completions"
 
     def __repr__(self) -> str:
         # api_key intentionally omitted.
@@ -62,7 +88,7 @@ class OpenAIBackend(AgentBackend):
         timeout = aiohttp.ClientTimeout(total=spec.timeout_s)
         try:
             async with aiohttp.ClientSession(timeout=timeout) as session:
-                async with session.post(_API_URL, headers=headers, json=body) as resp:
+                async with session.post(self._url, headers=headers, json=body) as resp:
                     if resp.status >= 400:
                         sink.emit(
                             "error",

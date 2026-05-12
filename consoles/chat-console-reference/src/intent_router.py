@@ -48,28 +48,28 @@ class IntentDecision:
 # the exact shape `IntentDecision` consumes. `agent` and `agent_prompt` are
 # optional at the schema level — they're only meaningful when action is
 # spawn_agent and the orchestrator handles missing values defensively.
+# Minimal schema — reasoning models tend to bleed thinking-tokens into
+# free-form fields and break the structured-output contract. Keeping the
+# schema to just `action` + the two required-when-spawning fields gives
+# the model less rope.
 _INTENT_SCHEMA = {
     "type": "object",
     "properties": {
         "action": {
             "type": "string",
             "enum": ["chat", "spawn_agent"],
-            "description": "chat = answer directly. spawn_agent = the operator is asking to dispatch an agent run.",
         },
         "agent": {
             "type": "string",
-            "description": "Agent spec name (must match one in the catalog) when action=spawn_agent.",
+            "description": "Agent spec name when action=spawn_agent; empty string otherwise.",
         },
         "agent_prompt": {
             "type": "string",
-            "description": "Operator instructions to forward to the spawned agent.",
-        },
-        "reasoning": {
-            "type": "string",
-            "description": "One sentence why this classification was chosen.",
+            "description": "Instructions to forward to the spawned agent; empty string when action=chat.",
         },
     },
-    "required": ["action"],
+    "required": ["action", "agent", "agent_prompt"],
+    "additionalProperties": False,
 }
 
 
@@ -115,24 +115,44 @@ def _format_catalog(catalog: Sequence[AgentCatalogEntry]) -> str:
 
 
 class IntentClassifier:
-    """Calls Ollama with format-constrained JSON to classify a prompt."""
+    """Calls an OpenAI-compatible /v1/chat/completions endpoint with
+    response_format=json_schema to classify a prompt. Works against
+    api.openai.com, LM Studio, vLLM, llama.cpp server, etc.
+
+    Configure via env: OPENAI_BASE_URL, OPENAI_API_KEY, OPENAI_MODEL.
+    CHAT_CONSOLE_INTENT_MODEL overrides just the classifier's model when
+    a separate (cheaper/faster) model is preferred for routing.
+    """
 
     def __init__(
         self,
         base_url: Optional[str] = None,
         model: Optional[str] = None,
-        timeout_seconds: float = 30.0,
+        api_key: Optional[str] = None,
+        timeout_seconds: Optional[float] = None,
     ):
-        self.base_url = (
-            base_url or os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
+        if timeout_seconds is None:
+            env_t = os.environ.get("CHAT_CONSOLE_INTENT_TIMEOUT_SECONDS", "")
+            try:
+                timeout_seconds = float(env_t) if env_t else 120.0
+            except ValueError:
+                timeout_seconds = 120.0
+        base = (
+            base_url
+            or os.environ.get("OPENAI_BASE_URL")
+            or "https://api.openai.com/v1"
         ).rstrip("/")
-        # Classifier model can be overridden separately from the chat model
-        # (use something fast/cheap for routing). Defaults to the chat model.
+        if not base.endswith("/v1") and "/v" not in base[-6:]:
+            base = f"{base}/v1"
+        self.base_url = base
         self.model = (
             model
             or os.environ.get("CHAT_CONSOLE_INTENT_MODEL")
-            or os.environ.get("OLLAMA_MODEL")
-            or "gemma3:12b"
+            or os.environ.get("OPENAI_MODEL")
+            or ""
+        )
+        self.api_key = (
+            api_key or os.environ.get("OPENAI_API_KEY") or "lm-studio"
         )
         self.timeout_seconds = timeout_seconds
 
@@ -141,6 +161,11 @@ class IntentClassifier:
         operator_prompt: str,
         catalog: Sequence[AgentCatalogEntry],
     ) -> IntentDecision:
+        if not self.model:
+            return IntentDecision(
+                action="chat",
+                reasoning="classifier model not configured (OPENAI_MODEL)",
+            )
         catalog_block = _format_catalog(catalog)
         system = _SYSTEM_TEMPLATE.format(catalog_block=catalog_block)
         body = {
@@ -149,16 +174,31 @@ class IntentClassifier:
                 {"role": "system", "content": system},
                 {"role": "user", "content": operator_prompt},
             ],
-            "format": _INTENT_SCHEMA,
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "intent",
+                    "strict": True,
+                    "schema": _INTENT_SCHEMA,
+                },
+            },
             "stream": False,
-            "options": {"temperature": 0.0},
+            "temperature": 0.0,
+            # Reasoning models burn an unpredictable amount of thinking
+            # tokens before the structured reply; give them headroom so the
+            # JSON terminator isn't clipped mid-string.
+            "max_tokens": 2048,
         }
-        url = f"{self.base_url}/api/chat"
+        url = f"{self.base_url}/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+        }
         timeout = aiohttp.ClientTimeout(total=self.timeout_seconds)
 
         try:
             async with aiohttp.ClientSession(timeout=timeout) as session:
-                async with session.post(url, json=body) as resp:
+                async with session.post(url, headers=headers, json=body) as resp:
                     if resp.status >= 300:
                         text = await resp.text()
                         logger.warning(
@@ -176,7 +216,9 @@ class IntentClassifier:
                 reasoning=f"classifier transport failure: {type(e).__name__}",
             )
 
-        content = ((data.get("message") or {}).get("content") or "").strip()
+        content = (
+            ((data.get("choices") or [{}])[0].get("message") or {}).get("content") or ""
+        ).strip()
         return _parse_decision(content, catalog)
 
 

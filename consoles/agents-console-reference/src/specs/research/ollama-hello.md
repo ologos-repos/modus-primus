@@ -1,6 +1,6 @@
 ---
 fork: dev
-model: ollama:tracys-mac/gemma3:12b
+model: openai:google/gemma-4-26b-a4b
 timeout_s: 120
 tools: []
 qa:
