@@ -5,19 +5,18 @@ completes, the daemon hands the run's transcript + the criteria to the
 Judge, which returns pass/fail/error + a one-sentence reason. Failure
 flips the run's status to `error`; pass leaves it `done`.
 
-The judge call is HTTP-direct against an Ollama-compatible /api/chat
-endpoint. agents-console is model-agnostic — there's no longer a
-subprocess CLI dependency. Judge target URL + model resolve in order:
+The judge call is HTTP-direct against an OpenAI-compatible
+`/v1/chat/completions` endpoint, using `response_format: {type:
+"json_schema"}` to pin the reply shape. agents-console is model-agnostic
+— same wire shape works against api.openai.com, LM Studio, vLLM, etc.
+Resolve order for the target URL + model:
 
   1. AGENTS_CONSOLE_JUDGE_URL / AGENTS_CONSOLE_JUDGE_MODEL (explicit)
-  2. ollama_hosts.json + spec.qa.judge_model (when judge_model carries
-     an `ollama:<host-alias>/<model-tag>` shape)
-  3. OLLAMA_URL / OLLAMA_MODEL (fallback to the same defaults the
-     OllamaBackend uses)
+  2. spec.qa.judge_model in `openai:<model-id>` form (uses
+     OPENAI_BASE_URL for the URL)
+  3. OPENAI_BASE_URL / OPENAI_MODEL fallback (legacy-spec compatibility)
 
-Format-constrained JSON (Ollama `format` parameter) pins the response
-into {outcome, reason} so any Ollama-served model works regardless of
-native tool support.
+Auth: OPENAI_API_KEY (LM-Studio-style servers accept any non-empty value).
 """
 from __future__ import annotations
 
@@ -32,7 +31,6 @@ import aiohttp
 
 from ..specs.model import AgentSpec
 
-from .ollama_hosts import load_hosts
 from .store import Event
 
 
@@ -45,7 +43,8 @@ _OUTCOMES = ("pass", "fail", "error")
 _TIMEOUT_SECONDS = 60.0
 
 
-# JSON schema passed to Ollama's `format` parameter — pins the reply shape.
+# OpenAI structured-output schema. `additionalProperties: false` + `strict`
+# keep models from injecting trailing chatter beyond {outcome, reason}.
 _VERDICT_SCHEMA = {
     "type": "object",
     "properties": {
@@ -59,14 +58,15 @@ _VERDICT_SCHEMA = {
         },
     },
     "required": ["outcome", "reason"],
+    "additionalProperties": False,
 }
 
 
 _SYSTEM_PROMPT = (
     "You are a strict QA judge. You read pass criteria and the transcript "
-    "of an agent run, then emit a verdict object: "
-    "{\"outcome\": \"pass\"|\"fail\", \"reason\": \"<one short sentence>\"}. "
-    "Reply with ONLY the JSON object — no prose, no markdown."
+    "of an agent run, then emit a verdict object matching the provided "
+    "schema: outcome ∈ {pass, fail} and a short reason. Reply with ONLY "
+    "the JSON object — no prose, no markdown."
 )
 
 
@@ -94,17 +94,20 @@ class Judge(ABC):
 
 
 class LLMJudge(Judge):
-    """Ollama-backed LLM-as-judge. Verdict comes back as format-constrained
-    JSON; any Ollama-served model works.
+    """OpenAI-compatible LLM-as-judge. Verdict comes back as
+    response_format=json_schema; any OpenAI-compat service that
+    implements structured output works.
     """
 
     def __init__(
         self,
         base_url: Optional[str] = None,
         model: Optional[str] = None,
+        api_key: Optional[str] = None,
     ):
         self._base_url_override = base_url
         self._model_override = model
+        self._api_key_override = api_key
 
     async def judge(
         self,
@@ -117,7 +120,7 @@ class LLMJudge(Judge):
             return JudgeResult("pass", "no qa criteria")
 
         try:
-            base_url, model = self._resolve_target(spec)
+            base_url, model, api_key = self._resolve_target(spec)
         except ValueError as e:
             return JudgeResult("error", f"judge config: {e}")
 
@@ -129,16 +132,27 @@ class LLMJudge(Judge):
                 {"role": "system", "content": _SYSTEM_PROMPT},
                 {"role": "user", "content": user_msg},
             ],
-            "format": _VERDICT_SCHEMA,
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "verdict",
+                    "strict": True,
+                    "schema": _VERDICT_SCHEMA,
+                },
+            },
             "stream": False,
-            "options": {"temperature": 0.0},
+            "temperature": 0.0,
         }
-        url = f"{base_url.rstrip('/')}/api/chat"
+        url = f"{base_url.rstrip('/')}/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        }
         timeout = aiohttp.ClientTimeout(total=_TIMEOUT_SECONDS)
 
         try:
             async with aiohttp.ClientSession(timeout=timeout) as session:
-                async with session.post(url, json=body) as resp:
+                async with session.post(url, headers=headers, json=body) as resp:
                     if resp.status >= 300:
                         text = await resp.text()
                         return JudgeResult(
@@ -149,42 +163,64 @@ class LLMJudge(Judge):
         except Exception as exc:
             return JudgeResult("error", f"judge transport: {type(exc).__name__}: {exc}")
 
-        content = ((data.get("message") or {}).get("content") or "").strip()
+        content = (
+            ((data.get("choices") or [{}])[0].get("message") or {}).get("content") or ""
+        ).strip()
         return _parse_verdict(content)
 
-    def _resolve_target(self, spec: AgentSpec) -> tuple[str, str]:
-        """Returns (base_url, model). Raises ValueError on missing config."""
+    def _resolve_target(self, spec: AgentSpec) -> tuple[str, str, str]:
+        """Returns (base_url, model, api_key). Raises ValueError on missing
+        configuration that cannot be defaulted.
+        """
         # 1) Explicit overrides (constructor or env)
-        if self._base_url_override and self._model_override:
-            return self._base_url_override, self._model_override
-        env_url = os.environ.get(_DEFAULT_JUDGE_URL_ENV)
-        env_model = os.environ.get(_DEFAULT_JUDGE_MODEL_ENV)
+        env_url = self._base_url_override or os.environ.get(_DEFAULT_JUDGE_URL_ENV)
+        env_model = self._model_override or os.environ.get(_DEFAULT_JUDGE_MODEL_ENV)
         if env_url and env_model:
-            return env_url, env_model
+            api_key = (
+                self._api_key_override
+                or os.environ.get("OPENAI_API_KEY")
+                or "lm-studio"  # any non-empty value satisfies LM Studio
+            )
+            return env_url, env_model, api_key
 
-        # 2) Spec-declared judge model in ollama:<alias>/<tag> form
+        # 2) Spec-declared judge model in openai:<model-id> form (uses the
+        #    operator-configured OPENAI_BASE_URL).
         judge_model = (spec.qa or {}).get("judge_model")
-        if judge_model and judge_model.startswith("ollama:"):
-            tag = judge_model[len("ollama:"):]
-            host_alias, sep, model_tag = tag.partition("/")
-            if sep and model_tag:
-                hosts = load_hosts()
-                if host_alias in hosts:
-                    return hosts[host_alias], model_tag
+        if judge_model and judge_model.startswith("openai:"):
+            model = judge_model[len("openai:"):]
+            base = (
+                self._base_url_override
+                or os.environ.get("OPENAI_BASE_URL")
+                or "https://api.openai.com/v1"
+            )
+            api_key = (
+                self._api_key_override
+                or os.environ.get("OPENAI_API_KEY")
+                or "lm-studio"
+            )
+            return base, model, api_key
 
-        # 3) Fallback to OLLAMA_URL/MODEL (same defaults as OllamaBackend
-        #    when no host alias is in scope).
-        base = self._base_url_override or os.environ.get(
-            "OLLAMA_URL", "http://127.0.0.1:11434"
+        # 3) Fallback to OPENAI_BASE_URL / OPENAI_MODEL.
+        base = (
+            self._base_url_override
+            or os.environ.get("OPENAI_BASE_URL")
+            or "https://api.openai.com/v1"
         )
-        mdl = self._model_override or os.environ.get("OLLAMA_MODEL")
-        if not mdl:
+        model = (
+            self._model_override
+            or os.environ.get("OPENAI_MODEL")
+        )
+        if not model:
             raise ValueError(
                 "no judge model resolved — set AGENTS_CONSOLE_JUDGE_MODEL, "
-                "or spec.qa.judge_model='ollama:<alias>/<tag>', "
-                "or OLLAMA_MODEL"
+                "or spec.qa.judge_model='openai:<model-id>', or OPENAI_MODEL"
             )
-        return base, mdl
+        api_key = (
+            self._api_key_override
+            or os.environ.get("OPENAI_API_KEY")
+            or "lm-studio"
+        )
+        return base, model, api_key
 
 
 def _format_transcript(events: list[Event]) -> str:
