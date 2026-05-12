@@ -30,7 +30,6 @@ from ..specs.loader import find_spec
 from ..specs.model import AgentSpec
 
 from .backend import AgentBackend
-from .claude_cli_backend import ClaudeCliBackend
 from .judge import Judge, LLMJudge
 from .gemini_backend import GeminiBackend
 from .ollama_backend import OllamaBackend
@@ -47,22 +46,32 @@ _DEFAULT_WORKSPACE_ROOT = (
 
 
 def select_backend(spec: AgentSpec, workspace: Path) -> AgentBackend:
-    """Pick a backend based on spec.provider and configure its working dir.
+    """Pick a backend based on spec.provider.
 
-    Phase 6: dispatch on `spec.provider`. `claude` (default for bare model
-    strings) routes to the existing subprocess `claude -p` backend.
-    `ollama`, `openai`, `gemini` are valid provider names; chunks B/C/D wire
-    them to their HTTP backends. Until then they raise NotImplementedError
-    so a misrouted spec produces a clean error rather than silently running
-    on claude.
+    Supported providers (all HTTP API-direct — no CLI subprocess):
 
-    `workspace` is the per-run sandbox dir (precomputed by run_one). The
-    claude backend uses it as default subprocess cwd; HTTP backends ignore
-    it. spec.cwd overrides for claude.
+      - ollama  → OllamaBackend (NDJSON /api/chat against a named host)
+      - openai  → OpenAIBackend (SSE /v1/chat/completions)
+      - gemini  → GeminiBackend (SSE :streamGenerateContent)
+
+    The `claude` provider was removed: agents-console is model-agnostic and
+    no longer carries a CLI-subscription auth path. Specs that historically
+    relied on the bare-model default (`model: sonnet` → provider="claude")
+    surface a clean ValueError here; migrate them to
+    `model: <provider>:<id>` with one of the supported providers above.
+
+    `workspace` is the per-run sandbox dir (precomputed by run_one). All
+    current backends are HTTP-direct and ignore it; spec.cwd is honored
+    where the backend opens a subprocess of its own (none do today).
     """
     p = spec.provider
     if p == "claude":
-        return ClaudeCliBackend(cwd=str(workspace))
+        raise ValueError(
+            f"spec {spec.name!r} declares provider='claude'; the claude "
+            f"backend was removed (agents-console is model-agnostic). "
+            f"Set `model: <provider>:<model-id>` with provider in "
+            f"{{ollama, openai, gemini}}."
+        )
     if p == "ollama":
         host_alias, sep, model_tag = spec.model_id.partition("/")
         if not sep or not model_tag:

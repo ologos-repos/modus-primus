@@ -1,6 +1,6 @@
 ---
 fork: dev
-model: sonnet
+model: ollama:tracys-mac/gemma3:12b
 timeout_s: 120
 tools: []   # explicit single-shot — no tools (preserves Phase 1 behavior)
 ---

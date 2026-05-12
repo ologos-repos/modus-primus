@@ -9,7 +9,6 @@ from typing import Optional
 import pytest
 
 from means.agents.runtime.backend import AgentBackend
-from means.agents.runtime.claude_cli_backend import ClaudeCliBackend
 from means.agents.runtime.daemon import run_one, select_backend
 from means.agents.runtime.run import spawn
 from means.agents.runtime.store import RunStore
@@ -214,13 +213,15 @@ def test_spawn_handles_proc_without_pid(store: RunStore):
 # ---------- backend selection ----------
 
 
-def test_select_backend_returns_claude_cli_for_claude_provider(tmp_path: Path):
-    """Phase 6: bare model strings + explicit `claude:` prefix both go to
-    ClaudeCliBackend (subprocess `claude -p` — uses [ENTERPRISE: cognitive engine CLI] subscription
-    auth, no API key needed)."""
+def test_select_backend_rejects_claude_provider(tmp_path: Path):
+    """Claude backend was removed (agents-console is model-agnostic). Specs
+    declaring provider='claude' — including bare-model strings that legacy
+    parsing mapped onto claude — must surface a clean ValueError here,
+    NOT silently spawn a missing subprocess."""
+    import pytest
     for model in ("sonnet", "opus", "claude-sonnet-4-6", "claude:haiku"):
-        backend = select_backend(_make_spec(model, tmp_path), tmp_path / "ws")
-        assert isinstance(backend, ClaudeCliBackend)
+        with pytest.raises(ValueError, match="claude"):
+            select_backend(_make_spec(model, tmp_path), tmp_path / "ws")
 
 
 def test_select_backend_dispatches_openai(tmp_path: Path, monkeypatch):
