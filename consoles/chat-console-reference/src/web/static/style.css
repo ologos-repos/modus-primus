@@ -113,6 +113,15 @@ html, body {
     font-weight: 600;
     letter-spacing: 0.02em;
 }
+.brand-model {
+    font-size: 11.5px;
+    font-weight: 400;
+    padding: 1px 6px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    white-space: nowrap;
+}
+.brand-model:empty { display: none; }
 .spacer { flex: 1; }
 .icon-btn, .menu-btn {
     background: transparent;

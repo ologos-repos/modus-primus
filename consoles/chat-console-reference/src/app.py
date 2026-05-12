@@ -124,8 +124,16 @@ def build_app(generator: Generator | None = None) -> web.Application:
         agents_url = os.environ.get(
             "AGENTS_CONSOLE_URL", "http://localhost:8081/agents-console"
         )
+        persona = os.environ.get("CHAT_CONSOLE_PERSONA_NAME", "chat console")
+        model = (
+            os.environ.get("CHAT_CONSOLE_MODEL")
+            or os.environ.get("OLLAMA_MODEL")
+            or ""
+        )
         html = index_path.read_text()
         html = html.replace("{{AGENTS_CONSOLE_URL}}", agents_url)
+        html = html.replace("{{PERSONA_NAME}}", persona)
+        html = html.replace("{{MODEL_NAME}}", model)
         html = html.replace("{{ASSET_VERSION}}", _asset_version())
         return web.Response(text=html, content_type="text/html")
 
