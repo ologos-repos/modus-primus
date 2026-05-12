@@ -103,12 +103,30 @@ def build_app(generator: Generator | None = None) -> web.Application:
     index_path = web_dir / "index.html"
     sw_path = web_dir / "static" / "sw.js"
 
+    static_dir = web_dir / "static"
+
+    def _asset_version() -> str:
+        """Cache-busting tag derived from the newest mtime under web/static.
+        Bumps automatically on any deploy that updates JS/CSS, so browsers
+        revalidate without operators having to hard-refresh.
+        """
+        try:
+            newest = max(
+                p.stat().st_mtime
+                for p in static_dir.rglob("*")
+                if p.is_file()
+            )
+            return str(int(newest))
+        except (OSError, ValueError):
+            return "0"
+
     async def serve_index(_req: web.Request) -> web.Response:
         agents_url = os.environ.get(
             "AGENTS_CONSOLE_URL", "http://localhost:8081/agents-console"
         )
         html = index_path.read_text()
         html = html.replace("{{AGENTS_CONSOLE_URL}}", agents_url)
+        html = html.replace("{{ASSET_VERSION}}", _asset_version())
         return web.Response(text=html, content_type="text/html")
 
     async def serve_sw(_req: web.Request) -> web.FileResponse:
