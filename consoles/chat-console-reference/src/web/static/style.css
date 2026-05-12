@@ -263,7 +263,8 @@ html, body {
     padding: 1px 4px;
     outline: none;
 }
-.session-rename {
+.session-rename,
+.session-delete {
     background: none;
     border: none;
     color: var(--fg-muted);
@@ -271,13 +272,17 @@ html, body {
     padding: 0 4px;
     font-size: 11px;
     opacity: 0;
-    transition: opacity 0.12s ease;
+    transition: opacity 0.12s ease, color 0.12s ease;
 }
-.session-row:hover .session-rename {
+.session-row:hover .session-rename,
+.session-row:hover .session-delete {
     opacity: 1;
 }
 .session-rename:hover {
     color: var(--fg-accent);
+}
+.session-delete:hover {
+    color: var(--error);
 }
 .session-meta {
     flex-shrink: 0;

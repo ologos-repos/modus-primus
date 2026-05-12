@@ -1061,6 +1061,7 @@
                     `<div class="session-row${isActive ? " active" : ""}" data-session-id="${escapeHtml(s.session_id)}">` +
                     `<span class="session-title" title="${titleHtml}">${titleHtml}</span>` +
                     `<button class="session-rename" type="button" title="Rename">✎</button>` +
+                    `<button class="session-delete" type="button" title="Delete session">🗑</button>` +
                     `<span class="session-meta muted">${s.turn_count}t · ${ageStr}</span>` +
                     `</div>`;
             }
@@ -1080,7 +1081,8 @@
     }
 
     // Click delegation: header toggles expand/collapse; row click switches
-    // session; pencil click renames; active row click is a no-op (#30).
+    // session; pencil click renames; trash click deletes; active row click
+    // is a no-op (#30).
     sessionsEl?.addEventListener("click", async (e) => {
         const header = e.target.closest(".sessions-header");
         if (header) {
@@ -1089,10 +1091,16 @@
             refreshSessions();  // re-render with toggled state
             return;
         }
+        const deleteBtn = e.target.closest(".session-delete");
         const renameBtn = e.target.closest(".session-rename");
         const row = e.target.closest(".session-row");
         if (!row) return;
         const sessionId = row.dataset.sessionId;
+        if (deleteBtn) {
+            e.stopPropagation();
+            await confirmAndDelete(row, sessionId);
+            return;
+        }
         if (renameBtn) {
             e.stopPropagation();
             beginRename(row, sessionId);
@@ -1101,6 +1109,36 @@
         if (sessionId === state.sessionId) return;  // active — no-op
         switchSession(sessionId);
     });
+
+    async function confirmAndDelete(row, sessionId) {
+        const titleEl = row.querySelector(".session-title");
+        const label = titleEl ? titleEl.textContent : sessionId;
+        const ok = window.confirm(
+            `Delete this session permanently?\n\n"${label}"\n\nAll turns and audit events for it will be removed.`
+        );
+        if (!ok) return;
+        try {
+            const resp = await fetch(
+                `/sessions/${encodeURIComponent(sessionId)}`,
+                { method: "DELETE" }
+            );
+            if (!resp.ok) {
+                window.alert(`Delete failed (HTTP ${resp.status}).`);
+                return;
+            }
+        } catch (err) {
+            window.alert(`Delete failed: ${err && err.message || err}`);
+            return;
+        }
+        // If the deleted session is the active one, wipe the conversation
+        // surface and drop the session id — wrapSession is the existing
+        // "new session" reset path. Also clear restored history blocks.
+        if (sessionId === state.sessionId) {
+            conv.innerHTML = "";
+            wrapSession();
+        }
+        refreshSessions();
+    }
 
     function beginRename(row, sessionId) {
         const titleEl = row.querySelector(".session-title");
