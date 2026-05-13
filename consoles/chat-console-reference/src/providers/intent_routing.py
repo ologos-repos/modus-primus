@@ -5,7 +5,12 @@ Flow per turn:
 
   1. Fetch agents-console catalog (cached briefly).
   2. Run IntentClassifier against the operator prompt.
-  3. If action == "chat": delegate to the wrapped base provider.
+  3. If action == "chat":
+        a. If the operator's prompt used spawn-vocabulary
+           ("spawn/run/dispatch/invoke … agent"), prepend a transparency
+           notice so they know no agent fired — the base provider then
+           answers the question directly.
+        b. Otherwise delegate to the wrapped base provider unchanged.
   4. If action == "spawn_agent":
        a. POST agents-console /agents/{name}/run with the synthesized
           agent_prompt.
@@ -24,6 +29,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
+import re
 import time
 from typing import Optional
 
@@ -42,6 +48,21 @@ logger = logging.getLogger(__name__)
 
 
 _TERMINAL_STATUSES = {"done", "error", "cancelled", "denied"}
+
+
+# Vocabulary that signals the operator was asking for a dispatch. When the
+# classifier returns chat anyway, we prepend a transparency notice so the
+# operator sees that no agent actually fired — instead of letting the base
+# model roleplay a fake execution log.
+_SPAWN_VERB_PATTERN = re.compile(
+    r"\b(spawn|dispatch|invoke|run|execute|fire(\s+up)?|kick\s+off|start)\b"
+    r".{0,40}\bagents?\b",
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def _looks_like_spawn_request(prompt: str) -> bool:
+    return bool(_SPAWN_VERB_PATTERN.search(prompt or ""))
 
 
 class IntentRoutingProvider(Provider):
@@ -81,6 +102,34 @@ class IntentRoutingProvider(Provider):
         catalog = await self._get_catalog()
         decision = await self.classifier.classify(prompt, catalog)
 
+        # Safety net for false-negative classifications. When the operator's
+        # wording clearly asks for a spawn ("spawn/run/dispatch/invoke …
+        # agent"), but the classifier returned chat — usually because no
+        # catalog name matches the request literally — override to the
+        # generic single-shot agent (hello-world) rather than hand the turn
+        # to the base model, which tends to roleplay a fake dispatch.
+        if (
+            decision.action != "spawn_agent"
+            and _looks_like_spawn_request(prompt)
+        ):
+            fallback = next(
+                (a.name for a in catalog if a.name == "hello-world"), None
+            )
+            if fallback:
+                logger.info(
+                    "intent_router: classifier said chat but prompt has spawn "
+                    "vocabulary; overriding to %r", fallback
+                )
+                decision = IntentDecision(
+                    action="spawn_agent",
+                    agent=fallback,
+                    agent_prompt=prompt,
+                    reasoning=(
+                        "spawn-vocab override (classifier returned chat for an "
+                        "explicit spawn request)"
+                    ),
+                )
+
         if decision.action != "spawn_agent" or not decision.agent:
             # Pure chat — delegate. Base provider is responsible for the
             # entire buf lifecycle (start/append/finish).
@@ -95,9 +144,15 @@ class IntentRoutingProvider(Provider):
         # Dispatch path. From here we own the buf lifecycle.
         await buf.start()
         try:
+            note = ""
+            if getattr(decision, "reasoning", "").startswith("spawn-vocab override"):
+                note = (
+                    "_(no catalog agent matched the request literally; "
+                    f"falling back to `{decision.agent}`)_\n"
+                )
             await self._emit_text(
                 buf,
-                f"_Dispatching `{decision.agent}` via agents-console…_\n",
+                f"{note}_Dispatching `{decision.agent}` via agents-console…_\n",
             )
             await self._dispatch_and_wait(
                 buf,
