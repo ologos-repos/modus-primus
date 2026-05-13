@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" font-family="IBM Plex Sans, system-ui, sans-serif">
+  <style>
+    .bg { fill: #FAFAF7; }
+    .panel { fill: #F0EFEA; stroke: #D8D6CE; stroke-width: 1; }
+    .panel-active { fill: #F5EEEE; stroke: #C0938A; stroke-width: 1.5; }
+    .step-circle { fill: #8B2E2E; }
+    .step-num { fill: #FFFFFF; font-size: 16px; font-weight: 700; }
+    .label-tiny { font-size: 11px; fill: #8B2E2E; font-weight: 600; letter-spacing: 1.5px; }
+    .component-name { font-size: 14px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .step-title { font-size: 13px; fill: #1A1A1A; font-weight: 600; }
+    .step-body { font-size: 11px; fill: #1A1A1A; }
+    .step-meta { font-size: 10px; fill: #8B2E2E; font-style: italic; }
+    .flow-arrow { stroke: #8B2E2E; stroke-width: 2; fill: none; }
+    .flow-arrow-dashed { stroke: #6B6B6B; stroke-width: 1.5; fill: none; stroke-dasharray: 4 4; }
+    .return-arrow { stroke: #6B6B6B; stroke-width: 1.5; fill: none; stroke-dasharray: 6 4; }
+    .figure-label { font-size: 12px; fill: #6B6B6B; }
+    .figure-title { font-size: 22px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .figure-subtitle { font-size: 14px; fill: #6B6B6B; font-style: italic; }
+    .footer { font-size: 11px; fill: #6B6B6B; font-style: italic; }
+    .lane-label { font-size: 11px; fill: #6B6B6B; font-weight: 600; letter-spacing: 1.5px; }
+  </style>
+
+  <defs>
+    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8B2E2E"/>
+    </marker>
+    <marker id="arrow-gray" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6B6B6B"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="1000"/>
+
+  <!-- Figure header -->
+  <text x="80" y="50" class="figure-label">Figure 2  ·  Enterprise AI Reference Architecture</text>
+  <text x="80" y="80" class="figure-title">Request Lifecycle Interaction Pattern</text>
+  <text x="80" y="105" class="figure-subtitle">A user request flows through the architecture from intake to audited completion</text>
+
+  <!-- Lane separator lines -->
+  <line x1="80" y1="160" x2="1520" y2="160" stroke="#D8D6CE" stroke-width="0.5"/>
+  <line x1="80" y1="990" x2="1520" y2="990" stroke="#D8D6CE" stroke-width="0.5"/>
+
+  <!-- Step 1: User request -->
+  <rect class="panel-active" x="100" y="180" width="280" height="140"/>
+  <circle class="step-circle" cx="125" cy="205" r="14"/>
+  <text class="step-num" x="125" y="211" text-anchor="middle">1</text>
+  <text x="150" y="210" class="step-title">User request</text>
+  <text x="115" y="240" class="step-body">User submits a request through</text>
+  <text x="115" y="256" class="step-body">a fit-for-purpose console.</text>
+  <text x="115" y="276" class="step-body">Identity established via the</text>
+  <text x="115" y="292" class="step-body">Identity and trust shared service.</text>
+  <text x="115" y="312" class="step-meta">consoles  ·  identity</text>
+
+  <!-- Arrow 1→2 -->
+  <line class="flow-arrow" x1="385" y1="250" x2="465" y2="250" marker-end="url(#arrow-red)"/>
+
+  <!-- Step 2: Orchestrator routing -->
+  <rect class="panel-active" x="470" y="180" width="320" height="140"/>
+  <circle class="step-circle" cx="495" cy="205" r="14"/>
+  <text class="step-num" x="495" y="211" text-anchor="middle">2</text>
+  <text x="520" y="210" class="step-title">Orchestrator receives and routes</text>
+  <text x="485" y="240" class="step-body">Enterprise AI Orchestrator validates the</text>
+  <text x="485" y="256" class="step-body">request, applies policy checks, and</text>
+  <text x="485" y="276" class="step-body">routes to the appropriate domain</text>
+  <text x="485" y="292" class="step-body">AI ecosystem based on request scope.</text>
+  <text x="485" y="312" class="step-meta">orchestrator  ·  policy engine</text>
+
+  <!-- Arrow 2→3 -->
+  <line class="flow-arrow" x1="795" y1="250" x2="875" y2="250" marker-end="url(#arrow-red)"/>
+
+  <!-- Step 3: Domain agent activates -->
+  <rect class="panel-active" x="880" y="180" width="280" height="140"/>
+  <circle class="step-circle" cx="905" cy="205" r="14"/>
+  <text class="step-num" x="905" y="211" text-anchor="middle">3</text>
+  <text x="930" y="210" class="step-title">Domain agent activates</text>
+  <text x="895" y="240" class="step-body">A domain-specific agent is selected</text>
+  <text x="895" y="256" class="step-body">or instantiated within its bounded</text>
+  <text x="895" y="276" class="step-body">scope. Agent contract specifies its</text>
+  <text x="895" y="292" class="step-body">authorized tools and constraints.</text>
+  <text x="895" y="312" class="step-meta">domain ecosystem  ·  agent runtime</text>
+
+  <!-- Arrow 3→4 -->
+  <line class="flow-arrow" x1="1165" y1="250" x2="1245" y2="250" marker-end="url(#arrow-red)"/>
+
+  <!-- Step 4: Agent invokes shared services -->
+  <rect class="panel-active" x="1250" y="180" width="270" height="140"/>
+  <circle class="step-circle" cx="1275" cy="205" r="14"/>
+  <text class="step-num" x="1275" y="211" text-anchor="middle">4</text>
+  <text x="1300" y="210" class="step-title">Shared services consumption</text>
+  <text x="1265" y="240" class="step-body">Agent retrieves context via Memory</text>
+  <text x="1265" y="256" class="step-body">Fabric, queries the Vector store,</text>
+  <text x="1265" y="276" class="step-body">accesses the Model Gateway, and</text>
+  <text x="1265" y="292" class="step-body">consults the Capability Registry.</text>
+  <text x="1265" y="312" class="step-meta">shared services</text>
+
+  <!-- Down arrow from step 4 to step 5 (curved L) -->
+  <path class="flow-arrow" d="M 1385 325 L 1385 380 L 1385 410" marker-end="url(#arrow-red)"/>
+
+  <!-- Step 5: Tool invocation through runtime -->
+  <rect class="panel-active" x="1190" y="420" width="330" height="160"/>
+  <circle class="step-circle" cx="1215" cy="445" r="14"/>
+  <text class="step-num" x="1215" y="451" text-anchor="middle">5</text>
+  <text x="1240" y="450" class="step-title">Tool invocation through runtime</text>
+  <text x="1205" y="480" class="step-body">Agent requests tool execution. The</text>
+  <text x="1205" y="496" class="step-body">Runtime applies pre-action validation:</text>
+  <text x="1205" y="512" class="step-body">policy check, authorization check,</text>
+  <text x="1205" y="528" class="step-body">sandbox enforcement, resource limits.</text>
+  <text x="1205" y="544" class="step-body">Action executes only if all gates pass.</text>
+  <text x="1205" y="568" class="step-meta">runtime  ·  policy enforcement  ·  sandbox</text>
+
+  <!-- Arrow 5→6 (left then down) -->
+  <path class="flow-arrow" d="M 1190 500 L 1100 500 L 1100 555" marker-end="url(#arrow-red)"/>
+
+  <!-- Step 6: Human approval gate (conditional) -->
+  <rect class="panel-active" x="780" y="420" width="320" height="160"/>
+  <circle class="step-circle" cx="805" cy="445" r="14"/>
+  <text class="step-num" x="805" y="451" text-anchor="middle">6</text>
+  <text x="830" y="450" class="step-title">Human approval (if required)</text>
+  <text x="795" y="480" class="step-body">If trust escalation level for this</text>
+  <text x="795" y="496" class="step-body">action requires approval, request is</text>
+  <text x="795" y="512" class="step-body">routed through Human Approval</text>
+  <text x="795" y="528" class="step-body">Workflow services. Both proposal and</text>
+  <text x="795" y="544" class="step-body">approval are captured as audit evidence.</text>
+  <text x="795" y="568" class="step-meta">human-in-the-loop  ·  trust escalation</text>
+
+  <!-- Arrow 6→7 (left then down) -->
+  <path class="flow-arrow" d="M 780 500 L 700 500 L 700 555" marker-end="url(#arrow-red)"/>
+
+  <!-- Step 7: Audit evidence emission -->
+  <rect class="panel-active" x="370" y="420" width="320" height="160"/>
+  <circle class="step-circle" cx="395" cy="445" r="14"/>
+  <text class="step-num" x="395" y="451" text-anchor="middle">7</text>
+  <text x="420" y="450" class="step-title">Audit evidence emission</text>
+  <text x="385" y="480" class="step-body">Every action emits structured audit</text>
+  <text x="385" y="496" class="step-body">evidence: request, policy decision,</text>
+  <text x="385" y="512" class="step-body">tool invocation, outcome, runtime</text>
+  <text x="385" y="528" class="step-body">assurance signals. Captured by the</text>
+  <text x="385" y="544" class="step-body">Observability service.</text>
+  <text x="385" y="568" class="step-meta">runtime  ·  observability</text>
+
+  <!-- Arrow 7→8 (left then down) -->
+  <path class="flow-arrow" d="M 370 500 L 270 500 L 270 555" marker-end="url(#arrow-red)"/>
+
+  <!-- Step 8: Response back to user (curved return) -->
+  <rect class="panel-active" x="100" y="420" width="260" height="160"/>
+  <circle class="step-circle" cx="125" cy="445" r="14"/>
+  <text class="step-num" x="125" y="451" text-anchor="middle">8</text>
+  <text x="150" y="450" class="step-title">Response to user</text>
+  <text x="115" y="480" class="step-body">Result returned to the user through</text>
+  <text x="115" y="496" class="step-body">the console. Audit chain remains</text>
+  <text x="115" y="512" class="step-body">queryable. Runtime assurance</text>
+  <text x="115" y="528" class="step-body">continues monitoring for drift</text>
+  <text x="115" y="544" class="step-body">and policy deviation post-response.</text>
+  <text x="115" y="568" class="step-meta">consoles  ·  runtime assurance</text>
+
+  <!-- ============================================== -->
+  <!-- Governance side panel showing what each step inherits -->
+  <!-- ============================================== -->
+  <rect class="panel" x="100" y="640" width="1420" height="280"/>
+  <rect x="100" y="640" width="1420" height="4" fill="#8B2E2E"/>
+  <text x="120" y="670" class="label-tiny">GOVERNANCE INHERITANCE  ·  WHAT EACH STEP RESPECTS</text>
+  <text x="120" y="700" class="component-name">Cross-cutting controls active at every step</text>
+
+  <!-- Governance items -->
+  <text x="120" y="730" class="step-title">Identity and access</text>
+  <text x="120" y="748" class="step-body">Every request authenticated.</text>
+  <text x="120" y="764" class="step-body">Every action authorized.</text>
+
+  <text x="380" y="730" class="step-title">Policy enforcement</text>
+  <text x="380" y="748" class="step-body">Declared in execution-policy.</text>
+  <text x="380" y="764" class="step-body">Enforced at runtime.</text>
+
+  <text x="640" y="730" class="step-title">Audit traceability</text>
+  <text x="640" y="748" class="step-body">Every step emits evidence.</text>
+  <text x="640" y="764" class="step-body">Chain queryable end-to-end.</text>
+
+  <text x="900" y="730" class="step-title">Trust escalation</text>
+  <text x="900" y="748" class="step-body">Level determines approval need.</text>
+  <text x="900" y="764" class="step-body">Evidence base earns advancement.</text>
+
+  <text x="1160" y="730" class="step-title">Runtime assurance</text>
+  <text x="1160" y="748" class="step-body">Drift, coherence, deviation</text>
+  <text x="1160" y="764" class="step-body">monitored continuously.</text>
+
+  <text x="120" y="810" class="step-title">Data classification</text>
+  <text x="120" y="828" class="step-body">Inherited from request context.</text>
+  <text x="120" y="844" class="step-body">Restricts tool authorization.</text>
+
+  <text x="380" y="810" class="step-title">Explainability</text>
+  <text x="380" y="828" class="step-body">Reasoning chain surfaceable.</text>
+  <text x="380" y="844" class="step-body">Required for trust escalation.</text>
+
+  <text x="640" y="810" class="step-title">Cost and FinOps</text>
+  <text x="640" y="828" class="step-body">Telemetry captured per request.</text>
+  <text x="640" y="844" class="step-body">Aggregated to budget controls.</text>
+
+  <text x="900" y="810" class="step-title">Evaluation</text>
+  <text x="900" y="828" class="step-body">Quality criteria per domain.</text>
+  <text x="900" y="844" class="step-body">Outcomes scored against criteria.</text>
+
+  <text x="1160" y="810" class="step-title">Compliance</text>
+  <text x="1160" y="828" class="step-body">Boundaries enforced at runtime.</text>
+  <text x="1160" y="844" class="step-body">FedRAMP, ITAR, CMMC as applicable.</text>
+
+  <text x="120" y="895" class="step-meta">All governance controls are declared in the Governance, Risk, and Assurance layer and enforced in the Runtime and Execution layer. The Observability service evidences the enforcement.</text>
+
+  <!-- Footer -->
+  <text x="80" y="960" class="footer">Pattern: a request enters via console, routes through orchestrator, activates a domain agent, consumes shared services, executes via runtime,</text>
+  <text x="80" y="976" class="footer">passes through human approval if trust level requires, emits audit evidence at every step, and returns to the user. Governance is inherited at every step.</text>
+</svg>
