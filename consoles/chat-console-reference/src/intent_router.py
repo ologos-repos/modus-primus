@@ -87,14 +87,33 @@ Decide whether the operator wants you to:
       receive. The agent_prompt MUST be self-contained — the agent never
       sees the operator's exact words, only what you put here.
 
-Rules:
-  - Default to action="chat" when in doubt.
-  - Only pick spawn_agent when the operator's prompt clearly asks for
-    one of the catalog agents to run, OR matches its declared purpose
-    closely (e.g., "check the status of foo" → check-services).
-  - Discussion about agents ("what does check-services do?") is "chat",
-    NOT spawn_agent.
-  - Return ONLY the JSON object; no prose."""
+Strong spawn signals — these almost always mean spawn_agent unless they
+are clearly meta-questions ABOUT agents (rule below):
+
+  - Verbs naming dispatch action: "spawn", "run", "dispatch", "invoke",
+    "execute", "fire", "kick off", "start" — when the object is the word
+    "agent" or a specific catalog agent name.
+  - Imperatives that name a catalog agent: "use hello-world to ...",
+    "have check-services tell me ...".
+  - Open-ended "spawn an agent to <do X>" with no explicit catalog match
+    → dispatch the generic single-shot agent (hello-world is the
+    canonical pick when no other agent fits); never refuse the spawn
+    just because the catalog name is unspecified.
+
+Meta-talk that stays chat:
+  - "what does <agent> do?", "list the agents", "explain the catalog",
+    "can <agent> handle X?" — those are about agents, not requests
+    to dispatch one.
+
+Catalog matching rule: when the operator names a capability that
+clearly maps to an agent's declared purpose (e.g. "check the status of
+nginx" → check-services; "summarize this paragraph" → concise-summary),
+pick that agent. Otherwise fall back to hello-world for open-ended
+single-shot questions.
+
+Output rules:
+  - Return ONLY the JSON object; no prose, no markdown fences.
+  - When action="chat", set agent="" and agent_prompt=""."""
 
 
 def _format_catalog(catalog: Sequence[AgentCatalogEntry]) -> str:
