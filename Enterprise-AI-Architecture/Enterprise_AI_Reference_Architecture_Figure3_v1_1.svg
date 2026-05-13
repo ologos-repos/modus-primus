@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" font-family="IBM Plex Sans, system-ui, sans-serif">
+  <style>
+    .bg { fill: #FAFAF7; }
+    .enclave-panel { fill: #F0EFEA; stroke: #BAB6A8; stroke-width: 1.5; }
+    .enclave-classified { fill: #ECE4DC; stroke: #8B6F58; stroke-width: 1.5; }
+    .component { fill: #FAFAF7; stroke: #BAB6A8; stroke-width: 1; }
+    .component-strong { fill: #F5EEEE; stroke: #C0938A; stroke-width: 1; }
+    .accent-bar { fill: #8B2E2E; }
+    .accent-bar-classified { fill: #5A3E2A; }
+    .label-tiny { font-size: 11px; fill: #8B2E2E; font-weight: 600; letter-spacing: 1.5px; }
+    .label-classified { font-size: 11px; fill: #5A3E2A; font-weight: 600; letter-spacing: 1.5px; }
+    .enclave-name { font-size: 18px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .component-name { font-size: 12px; fill: #1A1A1A; font-weight: 600; }
+    .component-detail { font-size: 10px; fill: #1A1A1A; }
+    .principle { font-size: 11px; fill: #6B6B6B; font-style: italic; }
+    .federation-label { font-size: 12px; fill: #8B2E2E; font-style: italic; font-weight: 600; }
+    .barrier-label { font-size: 11px; fill: #5A3E2A; font-style: italic; font-weight: 600; letter-spacing: 1px; }
+    .figure-label { font-size: 12px; fill: #6B6B6B; }
+    .figure-title { font-size: 22px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .figure-subtitle { font-size: 14px; fill: #6B6B6B; font-style: italic; }
+    .footer { font-size: 11px; fill: #6B6B6B; font-style: italic; }
+    .fed-arrow { stroke: #8B2E2E; stroke-width: 1.5; fill: none; stroke-dasharray: 6 4; }
+    .barrier { stroke: #5A3E2A; stroke-width: 3; fill: none; }
+  </style>
+
+  <defs>
+    <marker id="fed-arrow-head" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8B2E2E"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="1000"/>
+
+  <!-- Figure header -->
+  <text x="80" y="50" class="figure-label">Figure 3  ·  Enterprise AI Reference Architecture</text>
+  <text x="80" y="80" class="figure-title">Federation Deployment View</text>
+  <text x="80" y="105" class="figure-subtitle">Each security enclave hosts its own instance. Federation occurs through schema and signal aggregation, not cross-enclave invocation.</text>
+
+  <!-- ============================================== -->
+  <!-- ENCLAVE 1: Unclassified Corporate -->
+  <!-- ============================================== -->
+  <rect class="enclave-panel" x="80" y="160" width="460" height="600"/>
+  <rect class="accent-bar" x="80" y="160" width="460" height="4"/>
+  <text x="100" y="190" class="label-tiny">ENCLAVE  ·  UNCLASSIFIED CORPORATE</text>
+  <text x="100" y="218" class="enclave-name">Unclassified Network</text>
+  <text x="100" y="240" class="principle">Corporate IT environment. FedRAMP Moderate baseline.</text>
+
+  <!-- Components inside Enclave 1 -->
+  <rect class="component-strong" x="100" y="270" width="420" height="55"/>
+  <text x="115" y="290" class="component-name">Enterprise AI Orchestrator</text>
+  <text x="115" y="307" class="component-detail">Local instance. Coordinates within this enclave only.</text>
+
+  <rect class="component" x="100" y="335" width="420" height="55"/>
+  <text x="115" y="355" class="component-name">Shared Enterprise AI Services</text>
+  <text x="115" y="372" class="component-detail">Local instance. Identity, memory, retrieval, model gateway.</text>
+
+  <rect class="component" x="100" y="400" width="420" height="120"/>
+  <text x="115" y="420" class="component-name">Domain AI Ecosystems</text>
+  <text x="115" y="438" class="component-detail">Development  ·  Infrastructure Operations</text>
+  <text x="115" y="454" class="component-detail">Cyber Security  ·  Business Operations</text>
+  <text x="115" y="472" class="component-detail">Enterprise Knowledge  ·  Customer-Facing Operations</text>
+  <text x="115" y="498" class="principle">Highest variety of domains. Most permissive substrate access.</text>
+
+  <rect class="component" x="100" y="530" width="420" height="55"/>
+  <text x="115" y="550" class="component-name">AI Runtime and Execution</text>
+  <text x="115" y="567" class="component-detail">Cloud and on-premises. Commercial models and tools available.</text>
+
+  <rect class="component" x="100" y="595" width="420" height="55"/>
+  <text x="115" y="615" class="component-name">Governance, Risk, and Assurance</text>
+  <text x="115" y="632" class="component-detail">Local policy declaration. CUI-aware controls.</text>
+
+  <text x="100" y="690" class="principle">Substrate: commercial cloud, foundation model APIs,</text>
+  <text x="100" y="708" class="principle">third-party tools per security review.</text>
+  <text x="100" y="734" class="principle">Trust escalation: levels 1-4 available with evidence.</text>
+
+  <!-- ============================================== -->
+  <!-- ENCLAVE 2: GovCloud / FedRAMP High -->
+  <!-- ============================================== -->
+  <rect class="enclave-panel" x="570" y="160" width="460" height="600"/>
+  <rect class="accent-bar" x="570" y="160" width="460" height="4"/>
+  <text x="590" y="190" class="label-tiny">ENCLAVE  ·  GOVCLOUD / FEDRAMP HIGH</text>
+  <text x="590" y="218" class="enclave-name">GovCloud Network</text>
+  <text x="590" y="240" class="principle">Regulated workload environment. FedRAMP High, ITAR.</text>
+
+  <rect class="component-strong" x="590" y="270" width="420" height="55"/>
+  <text x="605" y="290" class="component-name">Enterprise AI Orchestrator</text>
+  <text x="605" y="307" class="component-detail">Local instance. Independent from corporate orchestrator.</text>
+
+  <rect class="component" x="590" y="335" width="420" height="55"/>
+  <text x="605" y="355" class="component-name">Shared Enterprise AI Services</text>
+  <text x="605" y="372" class="component-detail">Local instance. GovCloud-resident endpoints only.</text>
+
+  <rect class="component" x="590" y="400" width="420" height="120"/>
+  <text x="605" y="420" class="component-name">Domain AI Ecosystems</text>
+  <text x="605" y="438" class="component-detail">Development (program-scoped)</text>
+  <text x="605" y="454" class="component-detail">Infrastructure Operations</text>
+  <text x="605" y="472" class="component-detail">Cyber Security  ·  Program Operations</text>
+  <text x="605" y="498" class="principle">Domain scope subset of unclassified. Stronger access constraints.</text>
+
+  <rect class="component" x="590" y="530" width="420" height="55"/>
+  <text x="605" y="550" class="component-name">AI Runtime and Execution</text>
+  <text x="605" y="567" class="component-detail">GovCloud-resident runtimes only. Authorized models.</text>
+
+  <rect class="component" x="590" y="595" width="420" height="55"/>
+  <text x="605" y="615" class="component-name">Governance, Risk, and Assurance</text>
+  <text x="605" y="632" class="component-detail">FedRAMP High controls. ITAR data flow enforcement.</text>
+
+  <text x="590" y="690" class="principle">Substrate: GovCloud-resident models, FedRAMP-authorized</text>
+  <text x="590" y="708" class="principle">tools, no commercial cloud egress.</text>
+  <text x="590" y="734" class="principle">Trust escalation: levels 1-3 typical. Level 4 exceptional.</text>
+
+  <!-- ============================================== -->
+  <!-- ENCLAVE 3: Classified -->
+  <!-- ============================================== -->
+  <rect class="enclave-classified" x="1060" y="160" width="460" height="600"/>
+  <rect class="accent-bar-classified" x="1060" y="160" width="460" height="4"/>
+  <text x="1080" y="190" class="label-classified">ENCLAVE  ·  CLASSIFIED  ·  AIR-GAPPED</text>
+  <text x="1080" y="218" class="enclave-name">Classified Network</text>
+  <text x="1080" y="240" class="principle">Secret or higher. No connectivity to lower enclaves.</text>
+
+  <rect class="component-strong" x="1080" y="270" width="420" height="55"/>
+  <text x="1095" y="290" class="component-name">Enterprise AI Orchestrator</text>
+  <text x="1095" y="307" class="component-detail">Local instance. Air-gapped operation.</text>
+
+  <rect class="component" x="1080" y="335" width="420" height="55"/>
+  <text x="1095" y="355" class="component-name">Shared Enterprise AI Services</text>
+  <text x="1095" y="372" class="component-detail">Local instance. On-premises endpoints only.</text>
+
+  <rect class="component" x="1080" y="400" width="420" height="120"/>
+  <text x="1095" y="420" class="component-name">Domain AI Ecosystems</text>
+  <text x="1095" y="438" class="component-detail">Mission-specific domains</text>
+  <text x="1095" y="454" class="component-detail">(scope per ATO)</text>
+  <text x="1095" y="472" class="component-detail">Infrastructure Operations (limited)</text>
+  <text x="1095" y="498" class="principle">Narrowest domain scope. Strongest access constraints.</text>
+
+  <rect class="component" x="1080" y="530" width="420" height="55"/>
+  <text x="1095" y="550" class="component-name">AI Runtime and Execution</text>
+  <text x="1095" y="567" class="component-detail">On-premises only. Air-gapped foundation models.</text>
+
+  <rect class="component" x="1080" y="595" width="420" height="55"/>
+  <text x="1095" y="615" class="component-name">Governance, Risk, and Assurance</text>
+  <text x="1095" y="632" class="component-detail">Classified policy controls. ATO-bounded scope.</text>
+
+  <text x="1080" y="690" class="principle">Substrate: on-premises models only.</text>
+  <text x="1080" y="708" class="principle">No external network access.</text>
+  <text x="1080" y="734" class="principle">Trust escalation: levels 1-2 typical. Higher levels exceptional.</text>
+
+  <!-- ============================================== -->
+  <!-- Federation channels between enclaves -->
+  <!-- ============================================== -->
+
+  <!-- Federation between Enclave 1 and 2 -->
+  <text x="555" y="780" class="federation-label" text-anchor="middle">FEDERATION</text>
+  <text x="555" y="800" class="principle" text-anchor="middle">schema and signal aggregation</text>
+  <path class="fed-arrow" d="M 540 250 Q 555 240 570 250"/>
+  <path class="fed-arrow" d="M 570 280 Q 555 290 540 280" marker-end="url(#fed-arrow-head)"/>
+  <path class="fed-arrow" d="M 540 280 Q 555 290 570 280" marker-end="url(#fed-arrow-head)" transform="translate(-30 0) scale(-1 1) translate(-1110 0)" />
+  <!-- Simplify: two visible dashed arrows showing bidirectional schema/signal flow -->
+  <path class="fed-arrow" d="M 540 730 L 570 730" marker-end="url(#fed-arrow-head)"/>
+  <path class="fed-arrow" d="M 570 745 L 540 745" marker-end="url(#fed-arrow-head)"/>
+
+  <!-- Air-gap barrier between Enclave 2 and 3 -->
+  <line class="barrier" x1="1045" y1="160" x2="1045" y2="760"/>
+  <line class="barrier" x1="1050" y1="160" x2="1050" y2="760"/>
+  <text x="1047" y="790" class="barrier-label" text-anchor="middle">AIR GAP</text>
+  <text x="1047" y="805" class="principle" text-anchor="middle">no connectivity</text>
+
+  <!-- Bottom narrative explaining federation -->
+  <rect fill="#F0EFEA" stroke="#D8D6CE" stroke-width="1" x="80" y="830" width="1440" height="120"/>
+  <rect class="accent-bar" x="80" y="830" width="1440" height="4"/>
+  <text x="100" y="860" class="label-tiny">FEDERATION PRINCIPLES</text>
+
+  <text x="100" y="890" class="component-name">Schema, not invocation</text>
+  <text x="100" y="906" class="component-detail">Enclaves federate by sharing schemas (data models, audit formats, policy</text>
+  <text x="100" y="921" class="component-detail">contracts) and aggregated signals (metrics, audit summaries). They do not</text>
+  <text x="100" y="936" class="component-detail">invoke each other's agents or share data plane traffic.</text>
+
+  <text x="600" y="890" class="component-name">Tier-bounded delegation</text>
+  <text x="600" y="906" class="component-detail">Each enclave's orchestrator operates as the local authority for that enclave.</text>
+  <text x="600" y="921" class="component-detail">Architectural pattern decisions remain with the canonical authority for the</text>
+  <text x="600" y="936" class="component-detail">domain; instantiation is per enclave.</text>
+
+  <text x="1100" y="890" class="component-name">Air-gap absolute</text>
+  <text x="1100" y="906" class="component-detail">Classified enclaves have no connectivity to lower enclaves.</text>
+  <text x="1100" y="921" class="component-detail">Federation occurs only through approved transfer paths,</text>
+  <text x="1100" y="936" class="component-detail">never through architectural channels.</text>
+
+  <!-- Footer -->
+  <text x="80" y="985" class="footer">Pattern: each enclave hosts a self-contained reference architecture instance. Federation between enclaves is by schema and signal, not by invocation.</text>
+</svg>

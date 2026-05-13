@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" font-family="IBM Plex Sans, system-ui, sans-serif">
+  <style>
+    .bg { fill: #FAFAF7; }
+    .panel { fill: #F0EFEA; stroke: #D8D6CE; stroke-width: 1; }
+    .panel-strong { fill: #E8E5DC; stroke: #BAB6A8; stroke-width: 1; }
+    .panel-placeholder { fill: #FAFAF7; stroke: #BAB6A8; stroke-width: 1; stroke-dasharray: 6 4; }
+    .accent-bar { fill: #8B2E2E; }
+    .label-tiny { font-size: 11px; fill: #8B2E2E; font-weight: 600; letter-spacing: 2px; }
+    .layer-name { font-size: 18px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .component-name { font-size: 13px; fill: #1A1A1A; font-weight: 600; }
+    .component-detail { font-size: 11px; fill: #1A1A1A; }
+    .principle { font-size: 11px; fill: #6B6B6B; font-style: italic; }
+    .side-label { font-size: 12px; fill: #6B6B6B; font-style: italic; letter-spacing: 1px; }
+    .figure-label { font-size: 12px; fill: #6B6B6B; }
+    .figure-title { font-size: 22px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .figure-subtitle { font-size: 14px; fill: #6B6B6B; font-style: italic; }
+    .footer { font-size: 11px; fill: #6B6B6B; font-style: italic; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="1600" height="1000"/>
+
+  <!-- Figure header -->
+  <text x="80" y="50" class="figure-label">Figure 1  ·  Enterprise AI Reference Architecture</text>
+  <text x="80" y="80" class="figure-title">Component View</text>
+  <text x="80" y="105" class="figure-subtitle">MVP scope: three named Domain AI Ecosystems plus the generalization point for additional capability orchestrators. Governance applies cross-cutting.</text>
+
+  <!-- Layer labels on left -->
+  <text x="40" y="200" class="side-label" transform="rotate(-90, 40, 200)" text-anchor="middle">COORDINATION</text>
+  <text x="40" y="430" class="side-label" transform="rotate(-90, 40, 430)" text-anchor="middle">CAPABILITY</text>
+  <text x="40" y="780" class="side-label" transform="rotate(-90, 40, 780)" text-anchor="middle">FOUNDATION</text>
+
+  <!-- Cross-cutting governance label on right -->
+  <text x="1560" y="500" class="side-label" transform="rotate(90, 1560, 500)" text-anchor="middle">CROSS-CUTTING</text>
+
+  <!-- ============================================== -->
+  <!-- LAYER 1: Coordination - Enterprise AI Orchestrator -->
+  <!-- ============================================== -->
+  <rect class="panel" x="100" y="160" width="1300" height="120"/>
+  <rect class="accent-bar" x="100" y="160" width="1300" height="4"/>
+  <text x="120" y="190" class="label-tiny">LAYER 1  ·  COORDINATION</text>
+  <text x="120" y="218" class="layer-name">Enterprise AI Orchestrator</text>
+  <text x="120" y="245" class="component-detail">Request routing  ·  domain orchestration  ·  agent lifecycle  ·  policy enforcement  ·  context brokerage  ·  workflow coordination</text>
+  <text x="120" y="262" class="component-detail">Tool authorization  ·  audit logging  ·  model abstraction  ·  cost and performance governance</text>
+
+  <!-- ============================================== -->
+  <!-- LAYER 2: Capability - Shared Services (left) + Domain Ecosystems (right) -->
+  <!-- ============================================== -->
+
+  <!-- Shared Enterprise AI Services (left column) -->
+  <rect class="panel" x="100" y="310" width="600" height="280"/>
+  <rect class="accent-bar" x="100" y="310" width="600" height="4"/>
+  <text x="120" y="340" class="label-tiny">LAYER 2A  ·  SHARED SERVICES</text>
+  <text x="120" y="368" class="layer-name">Shared Enterprise AI Services</text>
+  <text x="120" y="394" class="component-detail">Identity and trust  ·  memory fabric  ·  vector and knowledge retrieval</text>
+  <text x="120" y="412" class="component-detail">Model gateway  ·  prompt and context management  ·  tool/API integration</text>
+  <text x="120" y="430" class="component-detail">Capability registry  ·  schema and contract registry</text>
+  <text x="120" y="448" class="component-detail">Observability and telemetry  ·  evaluation and testing</text>
+  <text x="120" y="466" class="component-detail">Human approval workflow services  ·  cost and FinOps telemetry</text>
+  <text x="120" y="500" class="principle">Shared services are consumed by every domain ecosystem.</text>
+  <text x="120" y="516" class="principle">No domain instantiates its own identity, retrieval, or evaluation infrastructure.</text>
+
+  <!-- Domain AI Ecosystems (right column) -->
+  <rect class="panel" x="730" y="310" width="670" height="280"/>
+  <rect class="accent-bar" x="730" y="310" width="670" height="4"/>
+  <text x="750" y="340" class="label-tiny">LAYER 2B  ·  DOMAIN ECOSYSTEMS</text>
+  <text x="750" y="368" class="layer-name">Domain AI Ecosystems</text>
+
+  <!-- Four domain cards: 3 named + 1 placeholder for MVP framing -->
+  <rect class="panel-strong" x="750" y="390" width="152" height="170"/>
+  <text x="760" y="412" class="component-name">Development</text>
+  <text x="760" y="432" class="component-detail">Requirements analysis</text>
+  <text x="760" y="448" class="component-detail">Architecture support</text>
+  <text x="760" y="464" class="component-detail">Code and test gen</text>
+  <text x="760" y="480" class="component-detail">CI/CD support</text>
+  <text x="760" y="496" class="component-detail">Documentation</text>
+
+  <rect class="panel-strong" x="916" y="390" width="152" height="170"/>
+  <text x="926" y="412" class="component-name">Infrastructure Ops</text>
+  <text x="926" y="432" class="component-detail">Observability correlation</text>
+  <text x="926" y="448" class="component-detail">Incident triage</text>
+  <text x="926" y="464" class="component-detail">Root cause analysis</text>
+  <text x="926" y="480" class="component-detail">Capacity forecasting</text>
+  <text x="926" y="496" class="component-detail">Automated remediation</text>
+
+  <rect class="panel-strong" x="1082" y="390" width="152" height="170"/>
+  <text x="1092" y="412" class="component-name">Cyber Security</text>
+  <text x="1092" y="432" class="component-detail">Threat detection</text>
+  <text x="1092" y="448" class="component-detail">Vulnerability prioritization</text>
+  <text x="1092" y="464" class="component-detail">Attack path analysis</text>
+  <text x="1092" y="480" class="component-detail">SIEM/SOAR integration</text>
+  <text x="1092" y="496" class="component-detail">Identity risk analysis</text>
+
+  <rect class="panel-placeholder" x="1248" y="390" width="152" height="170"/>
+  <text x="1258" y="412" class="component-name">Other Capability</text>
+  <text x="1258" y="428" class="component-name">Domain Orchestrators</text>
+  <text x="1258" y="450" class="component-detail">Business Operations</text>
+  <text x="1258" y="466" class="component-detail">Engineering</text>
+  <text x="1258" y="482" class="component-detail">Customer-Facing Ops</text>
+  <text x="1258" y="498" class="component-detail">Mission/Program Ops</text>
+  <text x="1258" y="514" class="component-detail">Enterprise Knowledge</text>
+  <text x="1258" y="540" class="principle">Not specified in MVP.</text>
+  <text x="1258" y="552" class="principle">Pattern generalizes.</text>
+
+  <text x="750" y="580" class="principle">Three named Domain AI Ecosystems plus the generalization point. Each follows the same pattern: bounded scope, shared services, domain evaluation.</text>
+
+  <!-- ============================================== -->
+  <!-- LAYER 3: Foundation - AI Runtime and Execution -->
+  <!-- ============================================== -->
+  <rect class="panel" x="100" y="620" width="1300" height="160"/>
+  <rect class="accent-bar" x="100" y="620" width="1300" height="4"/>
+  <text x="120" y="650" class="label-tiny">LAYER 3  ·  FOUNDATION</text>
+  <text x="120" y="678" class="layer-name">AI Runtime and Execution Layer</text>
+  <text x="120" y="706" class="component-detail">Agent runtimes  ·  workflow engines  ·  model endpoints  ·  tool adapters  ·  retrieval pipelines</text>
+  <text x="120" y="724" class="component-detail">Sandboxed execution environments  ·  API gateways  ·  event-driven automation</text>
+  <text x="120" y="752" class="principle">Every action with real-world consequence passes through this layer. The runtime enforces policy before allowing execution.</text>
+
+  <!-- ============================================== -->
+  <!-- CROSS-CUTTING: Governance, Risk, and Assurance -->
+  <!-- ============================================== -->
+  <rect class="panel" x="100" y="810" width="1300" height="130"/>
+  <rect class="accent-bar" x="100" y="810" width="1300" height="4"/>
+  <text x="120" y="840" class="label-tiny">CROSS-CUTTING  ·  APPLIES TO ALL LAYERS</text>
+  <text x="120" y="868" class="layer-name">Governance, Risk, and Assurance</text>
+  <text x="120" y="894" class="component-detail">Data classification  ·  access control  ·  human-in-the-loop gates  ·  trust escalation model  ·  auditability  ·  explainability requirements</text>
+  <text x="120" y="912" class="component-detail">Model risk management  ·  compliance mapping  ·  security boundaries  ·  acceptable-use policy  ·  evaluation standards</text>
+
+  <!-- Footer -->
+  <line x1="80" y1="965" x2="1520" y2="965" stroke="#6B6B6B" stroke-width="0.5"/>
+  <text x="80" y="985" class="footer">Layer dependency: Coordination depends on Capability; Capability depends on Foundation. Governance declares; Runtime enforces; Observability evidences.</text>
+</svg>
