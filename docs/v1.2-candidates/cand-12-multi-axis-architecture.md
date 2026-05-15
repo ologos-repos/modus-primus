@@ -30,7 +30,11 @@ The operational consequences of leaving this implicit:
 
 ### New §3.6 — Architectural Axes (multi-tenant · multi-user · multi-domain · multi-agent · multi-orchestrator)
 
-Add a new section under §3 that names the five axes and the levels they introduce. Reference figure: [Figure 1 — Corrected Stack](./cand-12-figure1-corrected-stack.svg).
+Add a new section under §3 that names the five axes and the levels they introduce.
+
+![Figure 1 — Corrected runtime stack](./cand-12-figure1-corrected-stack.png)
+
+*Figure 1 — Corrected runtime stack with consoles, tenants, principals, and cross-cutting fabric. Editable source: [cand-12-figure1-corrected-stack.svg](./cand-12-figure1-corrected-stack.svg)*
 
 > **§3.6 Architectural Axes.** A Modus Primus deployment is positioned along five orthogonal axes. The stack-level boundaries the axes introduce are:
 >
@@ -115,7 +119,11 @@ Extend the Orchestration Layer appendix to define the **interface any orchestrat
 
 ### New Appendix B.7 — Console Role-Gate Matrix
 
-Add a new appendix defining the role-gated console surface. Reference figure: [Figure 2 — Console Role-Gate Matrix](./cand-12-figure2-console-matrix.svg).
+Add a new appendix defining the role-gated console surface.
+
+![Figure 2 — Console role-gate matrix](./cand-12-figure2-console-matrix.png)
+
+*Figure 2 — Four consoles × three role tiers. Editable source: [cand-12-figure2-console-matrix.svg](./cand-12-figure2-console-matrix.svg)*
 
 > **Appendix B.7 — Console Role-Gate Matrix.** A Modus Primus deployment exposes four named console surfaces; each is gated by role tier:
 >
@@ -135,7 +143,11 @@ Add a new appendix defining the role-gated console surface. Reference figure: [F
 
 ### v1.0 → v2.0 sequencing
 
-Reference figure: [Figure 3 — Phase Sequencing](./cand-12-figure3-sequencing.svg). The candidate's adoption sequence is:
+The candidate's adoption sequence:
+
+![Figure 3 — v1.0 → v2.0 phase sequencing](./cand-12-figure3-sequencing.png)
+
+*Figure 3 — Phase sequencing v1.0 → v2.0. Editable source: [cand-12-figure3-sequencing.svg](./cand-12-figure3-sequencing.svg)*
 
 | Phase | Scope | Spec status |
 |---|---|---|
@@ -197,8 +209,12 @@ This candidate does not require ratification of either, but its v1.0 sequencing 
 - **Source DOCX edits.** Per the v1.2-candidates lifecycle (`README.md`), this candidate proposes the delta; DOCX edits land in a separate coordinated revision pass.
 - **Reference implementation refactor.** PRs in `ologos-corp/modus-primus-export` and `ologos-repos/modus-primus-sandbox` implement the v1.0 phase; this candidate proposes the spec change, not the code.
 
-## Figures
+## Figures (asset directory)
 
-- [Figure 1 — Corrected Stack](./cand-12-figure1-corrected-stack.svg)
-- [Figure 2 — Console Role-Gate Matrix](./cand-12-figure2-console-matrix.svg)
-- [Figure 3 — Phase Sequencing v1.0 → v2.0](./cand-12-figure3-sequencing.svg)
+All three figures are embedded inline above. Editable SVG sources and rendered PNGs alongside:
+
+| Figure | Embedded as | Editable source |
+|---|---|---|
+| 1 — Corrected runtime stack | [cand-12-figure1-corrected-stack.png](./cand-12-figure1-corrected-stack.png) | [cand-12-figure1-corrected-stack.svg](./cand-12-figure1-corrected-stack.svg) |
+| 2 — Console role-gate matrix | [cand-12-figure2-console-matrix.png](./cand-12-figure2-console-matrix.png) | [cand-12-figure2-console-matrix.svg](./cand-12-figure2-console-matrix.svg) |
+| 3 — Phase sequencing v1.0 → v2.0 | [cand-12-figure3-sequencing.png](./cand-12-figure3-sequencing.png) | [cand-12-figure3-sequencing.svg](./cand-12-figure3-sequencing.svg) |
