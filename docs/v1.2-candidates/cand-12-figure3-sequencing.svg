@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" font-family="IBM Plex Sans, system-ui, sans-serif">
+  <style>
+    .bg { fill: #FAFAF7; }
+    .panel { fill: #F0EFEA; stroke: #D8D6CE; stroke-width: 1; }
+    .panel-strong { fill: #E8E5DC; stroke: #BAB6A8; stroke-width: 1; }
+    .panel-phase { fill: #ECE6DD; stroke: #BAB6A8; stroke-width: 1.5; }
+    .panel-v2 { fill: #FAF1E8; stroke: #8B2E2E; stroke-width: 1.5; stroke-dasharray: 6 4; }
+    .accent-bar { fill: #8B2E2E; }
+    .timeline { stroke: #6B6B6B; stroke-width: 2; fill: none; }
+    .timeline-arrow { stroke: #1A1A1A; stroke-width: 2.5; fill: none; }
+    .label-tiny { font-size: 11px; fill: #8B2E2E; font-weight: 600; letter-spacing: 2px; }
+    .figure-label { font-size: 12px; fill: #6B6B6B; }
+    .figure-title { font-size: 22px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .figure-subtitle { font-size: 14px; fill: #6B6B6B; font-style: italic; }
+    .phase-tag { font-size: 14px; fill: #FAFAF7; font-weight: 700; }
+    .phase-circle { fill: #1A1A1A; stroke: #1A1A1A; }
+    .phase-circle-v2 { fill: #8B2E2E; stroke: #8B2E2E; }
+    .phase-name { font-size: 16px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .phase-scope { font-size: 12px; fill: #1A1A1A; }
+    .phase-detail { font-size: 11px; fill: #6B6B6B; }
+    .spec-status { font-size: 10px; fill: #8B2E2E; font-weight: 600; font-style: italic; letter-spacing: 1px; }
+    .outcome { font-size: 11px; fill: #1A1A1A; font-style: italic; }
+    .footer { font-size: 11px; fill: #6B6B6B; font-style: italic; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="1600" height="900"/>
+
+  <!-- Figure header -->
+  <text x="80" y="50" class="figure-label">Figure 3 · Candidate 12 · Adoption sequence</text>
+  <text x="80" y="80" class="figure-title">v1.0 → v2.0 Phase Sequencing</text>
+  <text x="80" y="105" class="figure-subtitle">Authz refactor first — single-tenant. Each phase adds one axis. v2.0 federation deferred to a later candidate.</text>
+
+  <!-- Timeline backbone -->
+  <line class="timeline" x1="120" y1="280" x2="1480" y2="280"/>
+  <path class="timeline-arrow" d="M 1480 280 L 1500 280 M 1490 273 L 1500 280 L 1490 287"/>
+
+  <!-- Phase 1.0 -->
+  <circle class="phase-circle" cx="200" cy="280" r="22"/>
+  <text x="200" y="286" class="phase-tag" text-anchor="middle">v1.0</text>
+  <rect class="panel-phase" x="120" y="330" width="240" height="290" rx="4"/>
+  <text x="140" y="360" class="phase-name">Authz refactor</text>
+  <text x="140" y="385" class="phase-scope">Single-tenant.</text>
+  <text x="140" y="403" class="phase-scope">Every console</text>
+  <text x="140" y="421" class="phase-scope">reads `groups`</text>
+  <text x="140" y="439" class="phase-scope">claim, enforces</text>
+  <text x="140" y="457" class="phase-scope">tier middleware.</text>
+  <text x="140" y="485" class="phase-detail">Port agents-console</text>
+  <text x="140" y="503" class="phase-detail">pattern to:</text>
+  <text x="140" y="521" class="phase-detail">• chat-console</text>
+  <text x="140" y="539" class="phase-detail">• Architecture Console</text>
+  <text x="140" y="557" class="phase-detail">• fleet (new)</text>
+  <text x="140" y="595" class="spec-status">APPENDIX B.7 LANDS</text>
+
+  <!-- Phase 1.1 -->
+  <circle class="phase-circle" cx="420" cy="280" r="22"/>
+  <text x="420" y="286" class="phase-tag" text-anchor="middle">v1.1</text>
+  <rect class="panel-phase" x="340" y="330" width="240" height="290" rx="4"/>
+  <text x="360" y="360" class="phase-name">Tenant axis</text>
+  <text x="360" y="385" class="phase-scope">Add `tenant_id`</text>
+  <text x="360" y="403" class="phase-scope">to data paths.</text>
+  <text x="360" y="421" class="phase-scope">Tag audit events</text>
+  <text x="360" y="439" class="phase-scope">with tenant.</text>
+  <text x="360" y="467" class="phase-detail">Still one tenant</text>
+  <text x="360" y="485" class="phase-detail">deployed — code</text>
+  <text x="360" y="503" class="phase-detail">is multi-tenant-</text>
+  <text x="360" y="521" class="phase-detail">capable.</text>
+  <text x="360" y="549" class="phase-detail">Scope spec catalog</text>
+  <text x="360" y="567" class="phase-detail">by tenant.</text>
+  <text x="360" y="595" class="spec-status">§3.6.1 LANDS</text>
+
+  <!-- Phase 1.2 -->
+  <circle class="phase-circle" cx="640" cy="280" r="22"/>
+  <text x="640" y="286" class="phase-tag" text-anchor="middle">v1.2</text>
+  <rect class="panel-phase" x="560" y="330" width="240" height="290" rx="4"/>
+  <text x="580" y="360" class="phase-name">Domain axis</text>
+  <text x="580" y="385" class="phase-scope">Introduce the</text>
+  <text x="580" y="403" class="phase-scope">`{agents, data-</text>
+  <text x="580" y="421" class="phase-scope">scope, user-roles}`</text>
+  <text x="580" y="439" class="phase-scope">triple.</text>
+  <text x="580" y="467" class="phase-detail">Per-domain agent</text>
+  <text x="580" y="485" class="phase-detail">catalog.</text>
+  <text x="580" y="503" class="phase-detail">Domain switcher</text>
+  <text x="580" y="521" class="phase-detail">in console UI.</text>
+  <text x="580" y="549" class="phase-detail">One tenant,</text>
+  <text x="580" y="567" class="phase-detail">multiple domains.</text>
+  <text x="580" y="595" class="spec-status">§3.6.3 LANDS</text>
+
+  <!-- Phase 1.3 -->
+  <circle class="phase-circle" cx="860" cy="280" r="22"/>
+  <text x="860" y="286" class="phase-tag" text-anchor="middle">v1.3</text>
+  <rect class="panel-phase" x="780" y="330" width="240" height="290" rx="4"/>
+  <text x="800" y="360" class="phase-name">OSI-MP</text>
+  <text x="800" y="385" class="phase-scope">Orchestrator-</text>
+  <text x="800" y="403" class="phase-scope">Substrate Interface</text>
+  <text x="800" y="421" class="phase-scope">contract written.</text>
+  <text x="800" y="449" class="phase-detail">Reference impl:</text>
+  <text x="800" y="467" class="phase-detail">oagent-core</text>
+  <text x="800" y="485" class="phase-detail">wrapped to OSI-MP.</text>
+  <text x="800" y="513" class="phase-detail">Audit / approval /</text>
+  <text x="800" y="531" class="phase-detail">spec hooks fully</text>
+  <text x="800" y="549" class="phase-detail">documented.</text>
+  <text x="800" y="595" class="spec-status">APPENDIX B.5 EXTENDED</text>
+
+  <!-- Phase 1.4 -->
+  <circle class="phase-circle" cx="1080" cy="280" r="22"/>
+  <text x="1080" y="286" class="phase-tag" text-anchor="middle">v1.4</text>
+  <rect class="panel-phase" x="1000" y="330" width="240" height="290" rx="4"/>
+  <text x="1020" y="360" class="phase-name">Multi-tenant</text>
+  <text x="1020" y="385" class="phase-scope">Per-tenant Keycloak</text>
+  <text x="1020" y="403" class="phase-scope">realm provisioning.</text>
+  <text x="1020" y="431" class="phase-detail">Fleet console</text>
+  <text x="1020" y="449" class="phase-detail">operational.</text>
+  <text x="1020" y="477" class="phase-detail">Deploy second</text>
+  <text x="1020" y="495" class="phase-detail">tenant on shared</text>
+  <text x="1020" y="513" class="phase-detail">substrate to prove</text>
+  <text x="1020" y="531" class="phase-detail">the mechanics.</text>
+  <text x="1020" y="595" class="spec-status">REALM TOPOLOGY ADDED</text>
+
+  <!-- Phase 2.0 (federation - dashed) -->
+  <circle class="phase-circle-v2" cx="1380" cy="280" r="22"/>
+  <text x="1380" y="286" class="phase-tag" text-anchor="middle">v2.0</text>
+  <rect class="panel-v2" x="1280" y="330" width="280" height="290" rx="4"/>
+  <text x="1300" y="360" class="phase-name" fill="#8B2E2E">Federation</text>
+  <text x="1300" y="385" class="phase-scope">Cross-enclave</text>
+  <text x="1300" y="403" class="phase-scope">ADR register +</text>
+  <text x="1300" y="421" class="phase-scope">B2B agent-to-</text>
+  <text x="1300" y="439" class="phase-scope">agent protocol.</text>
+  <text x="1300" y="467" class="phase-detail">When two</text>
+  <text x="1300" y="485" class="phase-detail">tenants need</text>
+  <text x="1300" y="503" class="phase-detail">to interact</text>
+  <text x="1300" y="521" class="phase-detail">across their</text>
+  <text x="1300" y="539" class="phase-detail">enclaves.</text>
+  <text x="1300" y="585" class="spec-status">OUT OF SCOPE</text>
+  <text x="1300" y="601" class="spec-status">FOR THIS CANDIDATE</text>
+
+  <!-- Outcomes label below -->
+  <text x="120" y="680" class="label-tiny">OUTCOMES</text>
+  <text x="120" y="710" class="outcome">v1.0: Single-tenant Modus Primus with consistent RBAC across all four consoles. Closes ologos-corp/ologos-ai#161.</text>
+  <text x="120" y="732" class="outcome">v1.1: Code paths tenant-aware; first non-PeakAI deployment unblocked (closes ologos-repos/modus-primus-sandbox#14).</text>
+  <text x="120" y="754" class="outcome">v1.2: Real enterprise multi-domain customer deployments tractable; per-domain agent catalog operational.</text>
+  <text x="120" y="776" class="outcome">v1.3: Orchestrator lock-in dissolved — heterogeneous orchestrators (Claude Code SDK, LangGraph, custom) plug in via OSI-MP.</text>
+  <text x="120" y="798" class="outcome">v1.4: Two-tenant deployment proves multi-tenancy; fleet console gives Ologos-ops cross-enclave visibility.</text>
+  <text x="120" y="820" class="outcome" fill="#8B2E2E">v2.0: Cross-tenant agent-to-agent interop — deferred to separate candidate.</text>
+
+  <!-- Footer -->
+  <text x="80" y="870" class="footer">Modus Primus v1.2 candidate · Adoption sequence — each phase one axis · v1.0 ships the foundation; multi-tenancy proven by v1.4</text>
+</svg>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" font-family="IBM Plex Sans, system-ui, sans-serif">
+  <style>
+    .bg { fill: #FAFAF7; }
+    .panel { fill: #F0EFEA; stroke: #D8D6CE; stroke-width: 1; }
+    .panel-strong { fill: #E8E5DC; stroke: #BAB6A8; stroke-width: 1; }
+    .panel-cell-yes { fill: #E8E5DC; stroke: #BAB6A8; stroke-width: 1; }
+    .panel-cell-no { fill: #FAFAF7; stroke: #D8D6CE; stroke-width: 1; stroke-dasharray: 4 3; }
+    .panel-cell-super { fill: #FAF1E8; stroke: #8B2E2E; stroke-width: 1.5; }
+    .panel-header { fill: #1A1A1A; stroke: none; }
+    .accent-bar { fill: #8B2E2E; }
+    .label-tiny { font-size: 11px; fill: #8B2E2E; font-weight: 600; letter-spacing: 2px; }
+    .figure-label { font-size: 12px; fill: #6B6B6B; }
+    .figure-title { font-size: 22px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .figure-subtitle { font-size: 14px; fill: #6B6B6B; font-style: italic; }
+    .header-text { font-size: 14px; fill: #FAFAF7; font-weight: 700; }
+    .row-name { font-size: 16px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .row-detail { font-size: 11px; fill: #6B6B6B; }
+    .cell-mark { font-size: 24px; fill: #1A1A1A; font-weight: 700; }
+    .cell-mark-super { font-size: 24px; fill: #8B2E2E; font-weight: 700; }
+    .cell-mark-no { font-size: 24px; fill: #BAB6A8; }
+    .cell-detail { font-size: 11px; fill: #1A1A1A; }
+    .footer { font-size: 11px; fill: #6B6B6B; font-style: italic; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="1400" height="900"/>
+
+  <!-- Figure header -->
+  <text x="80" y="50" class="figure-label">Figure 2 · Candidate 12 · Appendix B.7</text>
+  <text x="80" y="80" class="figure-title">Console Role-Gate Matrix</text>
+  <text x="80" y="105" class="figure-subtitle">Four consoles, three role tiers. Same console binary renders different views by tier — middleware reads `groups` claim and scopes content.</text>
+
+  <!-- Column headers -->
+  <rect class="panel-header" x="320" y="160" width="240" height="60"/>
+  <text x="440" y="190" class="header-text" text-anchor="middle">member</text>
+  <text x="440" y="210" class="header-text" text-anchor="middle" font-size="11" font-weight="400" fill="#BAB6A8">USER TIER</text>
+
+  <rect class="panel-header" x="580" y="160" width="240" height="60"/>
+  <text x="700" y="190" class="header-text" text-anchor="middle">admin</text>
+  <text x="700" y="210" class="header-text" text-anchor="middle" font-size="11" font-weight="400" fill="#BAB6A8">TENANT OPERATOR</text>
+
+  <rect class="panel-header" x="840" y="160" width="240" height="60"/>
+  <text x="960" y="190" class="header-text" text-anchor="middle">super-admin</text>
+  <text x="960" y="210" class="header-text" text-anchor="middle" font-size="11" font-weight="400" fill="#FAF1E8">CROSS-TENANT OPS</text>
+
+  <!-- Console name column header -->
+  <rect class="panel-header" x="80" y="160" width="240" height="60"/>
+  <text x="100" y="195" class="header-text">Console</text>
+
+  <!-- Row 1: chat -->
+  <rect class="panel-strong" x="80" y="230" width="240" height="100"/>
+  <text x="100" y="265" class="row-name">chat</text>
+  <text x="100" y="290" class="row-detail">conversational entry</text>
+  <text x="100" y="308" class="row-detail">point — every user</text>
+  <text x="100" y="326" class="row-detail">tier gets it</text>
+
+  <rect class="panel-cell-yes" x="320" y="230" width="240" height="100"/>
+  <text x="440" y="270" class="cell-mark" text-anchor="middle">✓</text>
+  <text x="440" y="295" class="cell-detail" text-anchor="middle">own conversations</text>
+  <text x="440" y="313" class="cell-detail" text-anchor="middle">+ agent spawns</text>
+  <text x="440" y="324" class="cell-detail" text-anchor="middle" fill="#6B6B6B">within own domain</text>
+
+  <rect class="panel-cell-yes" x="580" y="230" width="240" height="100"/>
+  <text x="700" y="270" class="cell-mark" text-anchor="middle">✓</text>
+  <text x="700" y="295" class="cell-detail" text-anchor="middle">tenant-wide</text>
+  <text x="700" y="313" class="cell-detail" text-anchor="middle">conversation view</text>
+
+  <rect class="panel-cell-super" x="840" y="230" width="240" height="100"/>
+  <text x="960" y="270" class="cell-mark-super" text-anchor="middle">✓</text>
+  <text x="960" y="295" class="cell-detail" text-anchor="middle">any tenant</text>
+  <text x="960" y="313" class="cell-detail" text-anchor="middle" fill="#8B2E2E">cross-tenant view</text>
+
+  <!-- Row 2: agents -->
+  <rect class="panel-strong" x="80" y="340" width="240" height="120"/>
+  <text x="100" y="375" class="row-name">agents</text>
+  <text x="100" y="400" class="row-detail">agent observation</text>
+  <text x="100" y="418" class="row-detail">+ management surface</text>
+  <text x="100" y="442" class="row-detail">— exemplar today</text>
+
+  <rect class="panel-cell-yes" x="320" y="340" width="240" height="120"/>
+  <text x="440" y="385" class="cell-mark" text-anchor="middle">✓</text>
+  <text x="440" y="410" class="cell-detail" text-anchor="middle">own + domain agents</text>
+  <text x="440" y="428" class="cell-detail" text-anchor="middle">scoped to user role</text>
+  <text x="440" y="446" class="cell-detail" text-anchor="middle" fill="#6B6B6B">in active domain</text>
+
+  <rect class="panel-cell-yes" x="580" y="340" width="240" height="120"/>
+  <text x="700" y="385" class="cell-mark" text-anchor="middle">✓</text>
+  <text x="700" y="410" class="cell-detail" text-anchor="middle">tenant-wide agents</text>
+  <text x="700" y="428" class="cell-detail" text-anchor="middle">across all domains</text>
+  <text x="700" y="446" class="cell-detail" text-anchor="middle" fill="#6B6B6B">in this tenant</text>
+
+  <rect class="panel-cell-super" x="840" y="340" width="240" height="120"/>
+  <text x="960" y="385" class="cell-mark-super" text-anchor="middle">✓</text>
+  <text x="960" y="410" class="cell-detail" text-anchor="middle">cross-tenant agents</text>
+  <text x="960" y="428" class="cell-detail" text-anchor="middle">fleet-wide visibility</text>
+  <text x="960" y="446" class="cell-detail" text-anchor="middle" fill="#8B2E2E">for Ologos-ops</text>
+
+  <!-- Row 3: architecture -->
+  <rect class="panel-strong" x="80" y="470" width="240" height="120"/>
+  <text x="100" y="505" class="row-name">architecture</text>
+  <text x="100" y="530" class="row-detail">structural-knowledge</text>
+  <text x="100" y="548" class="row-detail">drill (UAF canvas) —</text>
+  <text x="100" y="572" class="row-detail">operator territory</text>
+
+  <rect class="panel-cell-no" x="320" y="470" width="240" height="120"/>
+  <text x="440" y="525" class="cell-mark-no" text-anchor="middle">—</text>
+  <text x="440" y="555" class="cell-detail" text-anchor="middle" fill="#BAB6A8">not actionable for</text>
+  <text x="440" y="573" class="cell-detail" text-anchor="middle" fill="#BAB6A8">member-tier users</text>
+
+  <rect class="panel-cell-yes" x="580" y="470" width="240" height="120"/>
+  <text x="700" y="515" class="cell-mark" text-anchor="middle">✓</text>
+  <text x="700" y="540" class="cell-detail" text-anchor="middle">9-tile UAF canvas</text>
+  <text x="700" y="558" class="cell-detail" text-anchor="middle">structure, deps, decisions</text>
+  <text x="700" y="576" class="cell-detail" text-anchor="middle" fill="#6B6B6B">tenant-wide</text>
+
+  <rect class="panel-cell-super" x="840" y="470" width="240" height="120"/>
+  <text x="960" y="515" class="cell-mark-super" text-anchor="middle">✓</text>
+  <text x="960" y="540" class="cell-detail" text-anchor="middle">cross-tenant</text>
+  <text x="960" y="558" class="cell-detail" text-anchor="middle">structural view</text>
+  <text x="960" y="576" class="cell-detail" text-anchor="middle" fill="#8B2E2E">for Ologos-ops</text>
+
+  <!-- Row 4: fleet -->
+  <rect class="panel-strong" x="80" y="600" width="240" height="120"/>
+  <text x="100" y="635" class="row-name">fleet</text>
+  <text x="100" y="660" class="row-detail">cross-enclave</text>
+  <text x="100" y="678" class="row-detail">management — exists</text>
+  <text x="100" y="702" class="row-detail">only for ops operator</text>
+
+  <rect class="panel-cell-no" x="320" y="600" width="240" height="120"/>
+  <text x="440" y="655" class="cell-mark-no" text-anchor="middle">—</text>
+
+  <rect class="panel-cell-no" x="580" y="600" width="240" height="120"/>
+  <text x="700" y="655" class="cell-mark-no" text-anchor="middle">—</text>
+  <text x="700" y="685" class="cell-detail" text-anchor="middle" fill="#BAB6A8">tenant-tier operator</text>
+  <text x="700" y="703" class="cell-detail" text-anchor="middle" fill="#BAB6A8">cannot see other tenants</text>
+
+  <rect class="panel-cell-super" x="840" y="600" width="240" height="120"/>
+  <text x="960" y="645" class="cell-mark-super" text-anchor="middle">✓</text>
+  <text x="960" y="670" class="cell-detail" text-anchor="middle">deploy · monitor</text>
+  <text x="960" y="688" class="cell-detail" text-anchor="middle">lifecycle N enclaves</text>
+  <text x="960" y="706" class="cell-detail" text-anchor="middle" fill="#8B2E2E">Ologos substrate only</text>
+
+  <!-- Right side: implementation note -->
+  <rect class="panel" x="1110" y="230" width="240" height="490" rx="4"/>
+  <text x="1130" y="260" class="row-name">Reference pattern</text>
+  <text x="1130" y="290" class="row-detail">agents-console today:</text>
+  <text x="1130" y="312" class="row-detail">• oidc_middleware</text>
+  <text x="1130" y="330" class="row-detail">• reads `groups` claim</text>
+  <text x="1130" y="348" class="row-detail">• classifies tier</text>
+  <text x="1130" y="366" class="row-detail">• per-tier view rendered</text>
+  <text x="1130" y="384" class="row-detail">  (single binary)</text>
+  <text x="1130" y="412" class="row-detail">All four consoles in v1.0</text>
+  <text x="1130" y="430" class="row-detail">adopt this pattern.</text>
+  <text x="1130" y="468" class="label-tiny">RBAC AUDIT GAPS</text>
+  <text x="1130" y="492" class="row-detail">chat — edge-only today</text>
+  <text x="1130" y="510" class="row-detail">architecture — no gate</text>
+  <text x="1130" y="528" class="row-detail">fleet — does not exist</text>
+  <text x="1130" y="566" class="row-detail">v1.0 closes all three.</text>
+
+  <!-- Footer -->
+  <text x="80" y="850" class="footer">Modus Primus v1.2 candidate · Reference: ologos-corp/ologos-ai#161 (RBAC audit) — agents-console is the only console enforcing this matrix today.</text>
+</svg>
