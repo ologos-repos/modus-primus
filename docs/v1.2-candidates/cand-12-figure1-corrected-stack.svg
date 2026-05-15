@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" font-family="IBM Plex Sans, system-ui, sans-serif">
+  <style>
+    .bg { fill: #FAFAF7; }
+    .panel { fill: #F0EFEA; stroke: #D8D6CE; stroke-width: 1; }
+    .panel-strong { fill: #E8E5DC; stroke: #BAB6A8; stroke-width: 1; }
+    .panel-tenant { fill: #ECE6DD; stroke: #BAB6A8; stroke-width: 1.5; }
+    .panel-principal { fill: #FAF1E8; stroke: #8B2E2E; stroke-width: 1.5; }
+    .panel-crosscut { fill: #FAFAF7; stroke: #BAB6A8; stroke-width: 1; stroke-dasharray: 6 4; }
+    .accent-bar { fill: #8B2E2E; }
+    .arrow { stroke: #6B6B6B; stroke-width: 1.5; fill: none; }
+    .arrow-strong { stroke: #1A1A1A; stroke-width: 2; fill: none; }
+    .label-tiny { font-size: 11px; fill: #8B2E2E; font-weight: 600; letter-spacing: 2px; }
+    .layer-name { font-size: 16px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .layer-detail { font-size: 12px; fill: #1A1A1A; }
+    .principle { font-size: 11px; fill: #6B6B6B; font-style: italic; }
+    .side-label { font-size: 12px; fill: #6B6B6B; font-style: italic; letter-spacing: 1px; }
+    .figure-label { font-size: 12px; fill: #6B6B6B; }
+    .figure-title { font-size: 22px; fill: #1A1A1A; font-weight: 700; font-family: Georgia, serif; }
+    .figure-subtitle { font-size: 14px; fill: #6B6B6B; font-style: italic; }
+    .footer { font-size: 11px; fill: #6B6B6B; font-style: italic; }
+    .crosscut-label { font-size: 12px; fill: #6B6B6B; font-weight: 600; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="1600" height="1100"/>
+
+  <!-- Figure header -->
+  <text x="80" y="50" class="figure-label">Figure 1 · Candidate 12 · Multi-Axis Architecture</text>
+  <text x="80" y="80" class="figure-title">Corrected Runtime Stack</text>
+  <text x="80" y="105" class="figure-subtitle">Five axes — tenant, user, domain, agent, orchestrator — and the levels they introduce. Principals operate from outside; cross-cutting fabric pierces every layer.</text>
+
+  <!-- Left side: axis labels -->
+  <text x="40" y="450" class="side-label" transform="rotate(-90, 40, 450)" text-anchor="middle">RUNTIME STACK</text>
+  <text x="40" y="850" class="side-label" transform="rotate(-90, 40, 850)" text-anchor="middle">DATA · CROSS-CUT</text>
+
+  <!-- Right side: scope labels -->
+  <text x="1560" y="220" class="side-label" transform="rotate(90, 1560, 220)" text-anchor="middle">PRINCIPAL</text>
+  <text x="1560" y="450" class="side-label" transform="rotate(90, 1560, 450)" text-anchor="middle">TENANT-SCOPED</text>
+  <text x="1560" y="850" class="side-label" transform="rotate(90, 1560, 850)" text-anchor="middle">DOMAIN-SCOPED</text>
+
+  <!-- ===================================================== -->
+  <!-- Principals layer (top, outside) -->
+  <!-- ===================================================== -->
+  <text x="80" y="150" class="label-tiny">OUTSIDE THE STACK</text>
+  <rect class="panel-principal" x="200" y="170" width="1200" height="80" rx="4"/>
+  <text x="240" y="200" class="layer-name">Principals</text>
+  <text x="240" y="222" class="layer-detail">Users · Operators · (Ologos-ops as cross-tenant operator)</text>
+  <text x="240" y="240" class="principle">Authenticate at the edge via tenant's Keycloak realm — `groups` + `realm_roles` claims propagate down through every layer.</text>
+
+  <!-- Claims flow arrow -->
+  <path class="arrow-strong" d="M 800 250 L 800 280 M 795 275 L 800 285 L 805 275" />
+  <text x="820" y="275" class="principle">Keycloak claims flow ↓</text>
+
+  <!-- ===================================================== -->
+  <!-- Consoles layer (role-gated front door) -->
+  <!-- ===================================================== -->
+  <text x="80" y="310" class="label-tiny">FRONT DOOR</text>
+  <rect class="panel-strong" x="200" y="330" width="1200" height="65" rx="4"/>
+  <text x="240" y="358" class="layer-name">Consoles (role-gated)</text>
+  <text x="240" y="382" class="layer-detail">chat · agents · architecture · fleet — gate by `groups` claim per Appendix B.7</text>
+
+  <!-- ===================================================== -->
+  <!-- Tenant boundary box (outer container) -->
+  <!-- ===================================================== -->
+  <rect class="panel-tenant" x="200" y="420" width="1200" height="500" rx="6"/>
+  <text x="220" y="445" class="label-tiny">TENANT (per-tenant infra default)</text>
+  <text x="220" y="465" class="layer-name">Enclave — one tenant</text>
+
+  <!-- meta-harness -->
+  <rect class="panel-strong" x="240" y="485" width="1120" height="50" rx="4"/>
+  <text x="270" y="510" class="layer-name">meta-harness</text>
+  <text x="500" y="510" class="layer-detail">per-tenant governance specification (PAHA-conformant 4M doc set)</text>
+
+  <!-- models + harnesses -->
+  <rect class="panel" x="240" y="550" width="540" height="60" rx="4"/>
+  <text x="270" y="575" class="layer-name">models</text>
+  <text x="270" y="595" class="layer-detail">substrate the orchestrator selects</text>
+
+  <rect class="panel" x="820" y="550" width="540" height="60" rx="4"/>
+  <text x="850" y="575" class="layer-name">harnesses</text>
+  <text x="850" y="595" class="layer-detail">4M-conformant runtimes that wrap a model</text>
+
+  <!-- orchestrators -->
+  <rect class="panel-strong" x="240" y="625" width="1120" height="55" rx="4"/>
+  <text x="270" y="650" class="layer-name">orchestrators</text>
+  <text x="500" y="650" class="layer-detail">coordinate harnesses · plug in via OSI-MP (Appendix B.5)</text>
+  <text x="270" y="670" class="principle">multi-orchestrator: oagent-core · Claude Code SDK · LangGraph · custom — all OSI-MP-conformant</text>
+
+  <!-- specs (the catalog) -->
+  <rect class="panel" x="240" y="695" width="1120" height="50" rx="4"/>
+  <text x="270" y="720" class="layer-name">specs (catalog)</text>
+  <text x="500" y="720" class="layer-detail">declarative 4M-conformant agent contracts — what the orchestrator dispatches against</text>
+
+  <!-- agents (instances) -->
+  <rect class="panel" x="240" y="760" width="1120" height="50" rx="4"/>
+  <text x="270" y="785" class="layer-name">agents</text>
+  <text x="500" y="785" class="layer-detail">running instances of catalog specs — bounded lifetime, audited end-to-end</text>
+
+  <!-- tools -->
+  <rect class="panel" x="240" y="825" width="1120" height="50" rx="4"/>
+  <text x="270" y="850" class="layer-name">tools</text>
+  <text x="500" y="850" class="layer-detail">action surface — invoked by agents — gated by per-agent tool-grant policy</text>
+
+  <!-- Domain scoping note inside tenant box -->
+  <text x="240" y="900" class="principle">Domain scope `{agents, data, user-roles}` — a user belongs to one or more domains; per-domain role may differ; multi-domain selectable in console UI.</text>
+
+  <!-- ===================================================== -->
+  <!-- Data substrate (parallel) -->
+  <!-- ===================================================== -->
+  <text x="80" y="960" class="label-tiny">PARALLEL SUBSTRATE</text>
+  <rect class="panel" x="200" y="980" width="580" height="60" rx="4"/>
+  <text x="230" y="1005" class="layer-name">Data substrate</text>
+  <text x="230" y="1025" class="layer-detail">RAG corpus · artifacts · file stores — domain-scoped</text>
+
+  <!-- Cross-cutting -->
+  <rect class="panel-crosscut" x="820" y="980" width="580" height="60" rx="4"/>
+  <text x="850" y="1005" class="layer-name">Cross-cutting fabric</text>
+  <text x="850" y="1025" class="layer-detail">identity · audit · policy · memory — pierce every layer above</text>
+
+  <!-- Footer -->
+  <text x="80" y="1075" class="footer">Modus Primus v1.2 candidate · Architectural axes: tenant · user · domain · agent · orchestrator</text>
+</svg>
